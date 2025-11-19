@@ -177,27 +177,39 @@ body {
 
 /* Добавляем эти стили в конец файла */
 
+/* Добавляем эти стили в конец файла */
+
 .selected-role {
     background: var(--primary-light);
     border: 2px solid var(--primary);
     border-radius: 0.5rem;
     padding: 1rem;
     margin-bottom: 1.5rem;
-    text-align: center;
     animation: slideDown 0.3s ease-out;
 }
 
-.role-badge {
+.role-info {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
+    justify-content: space-between;
+    font-size: 0.9rem;
+}
+
+.role-label {
+    color: var(--gray-700);
     font-weight: 500;
+}
+
+.role-value {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
     color: var(--primary-dark);
 }
 
-.role-badge span:first-child {
-    font-size: 1.25rem;
+.role-value span:first-child {
+    font-size: 1.1rem;
 }
 
 @keyframes slideDown {
@@ -344,5 +356,11 @@ body {
 
     .logo h1 {
         font-size: 1.75rem;
+    }
+
+    .role-info {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
     }
 }

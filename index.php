@@ -18,14 +18,6 @@
             Неверный логин или пароль
         </div>
 
-        <!-- Блок с выбранной ролью -->
-        <div class="selected-role" id="selected-role" style="display: none;">
-            <div class="role-badge">
-                <span id="role-icon">🎓</span>
-                <span id="role-text">Студент</span>
-            </div>
-        </div>
-
         <form id="login-form" action="auth.php" method="POST">
             <input type="hidden" id="role" name="role" value="">
             
@@ -37,6 +29,17 @@
             <div class="form-group">
                 <label class="form-label" for="password">Пароль</label>
                 <input type="password" id="password" name="password" class="form-input" placeholder="Введите ваш пароль" required>
+            </div>
+
+            <!-- Блок с выбранной ролью -->
+            <div class="selected-role" id="selected-role" style="display: none;">
+                <div class="role-info">
+                    <span class="role-label">Ваша роль:</span>
+                    <span class="role-value">
+                        <span id="role-icon">🎓</span>
+                        <span id="role-text">Студент</span>
+                    </span>
+                </div>
             </div>
 
             <button type="submit" class="btn btn-primary">
