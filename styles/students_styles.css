@@ -1,0 +1,381 @@
+/* Стили для личного кабинета студента */
+
+body {
+    background-color: var(--gray-100);
+    color: var(--gray-800);
+}
+
+/* Шапка */
+.header {
+    background: var(--white);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Основной контент */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.card {
+    background: var(--white);
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Двухколоночный layout */
+.dashboard {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Управление расписанием */
+.schedule-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.week-navigation {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.current-week {
+    font-weight: bold;
+    min-width: 200px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+/* Таблица расписания */
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.schedule-table th {
+    background: var(--primary);
+    color: var(--white);
+    padding: 1rem;
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid var(--primary-dark);
+}
+
+.schedule-table td {
+    padding: 0.75rem;
+    border: 1px solid var(--gray-200);
+    text-align: center;
+    vertical-align: top;
+    height: 80px;
+}
+
+.time-column {
+    background: var(--gray-100);
+    font-weight: 500;
+    width: 80px;
+}
+
+.lecture-cell {
+    background: var(--primary-light);
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    margin: 0.125rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 2px solid transparent;
+    position: relative;
+}
+
+.lecture-cell.attended {
+    background: var(--success-light);
+    border-color: var(--success-border);
+}
+
+.lecture-cell.missed {
+    background: var(--danger-light);
+    border-color: var(--danger-border);
+}
+
+.lecture-cell.cancelled {
+    background: var(--warning-light);
+    border-color: var(--warning-border);
+}
+
+.lecture-cell:hover {
+    transform: scale(1.02);
+}
+
+.lecture-cell.empty {
+    background: transparent;
+    cursor: default;
+}
+
+.lecture-cell.empty:hover {
+    transform: none;
+    background: transparent;
+}
+
+.lecture-name {
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.lecture-details {
+    font-size: 0.75rem;
+    color: var(--gray-600);
+}
+
+.lecture-room {
+    color: var(--primary-dark);
+    font-weight: 500;
+}
+
+.attendance-status {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.attendance-status.attended {
+    background: var(--success);
+}
+
+.attendance-status.missed {
+    background: var(--danger);
+}
+
+.attendance-status.cancelled {
+    background: var(--warning);
+}
+
+/* Статистика по предметам */
+.stats-overview {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    text-align: center;
+    border-left: 4px solid var(--primary);
+}
+
+.stat-card.good {
+    border-left-color: var(--success);
+}
+
+.stat-card.warning {
+    border-left-color: var(--warning);
+}
+
+.stat-card.danger {
+    border-left-color: var(--danger);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value.good { color: var(--success); }
+.stat-value.warning { color: var(--warning); }
+.stat-value.danger { color: var(--danger); }
+
+.stat-label {
+    color: var(--gray-600);
+    font-size: 0.9rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--gray-200);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0.5rem 0;
+}
+
+.progress-fill {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.progress-fill.good { background: var(--success); }
+.progress-fill.warning { background: var(--warning); }
+.progress-fill.danger { background: var(--danger); }
+
+/* Список предметов */
+.subjects-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.subject-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.subject-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.subject-name {
+    font-weight: 500;
+}
+
+.subject-teacher {
+    color: var(--gray-600);
+    font-size: 0.875rem;
+}
+
+.attendance-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.attendance-badge.good {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.attendance-badge.warning {
+    background: var(--warning-light);
+    color: var(--warning);
+}
+
+.attendance-badge.danger {
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
+/* Легенда */
+.legend {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+}
+
+.legend-color.future {
+    background: var(--primary-light);
+    border: 1px solid var(--primary);
+}
+
+.legend-color.attended {
+    background: var(--success-light);
+    border: 1px solid var(--success-border);
+}
+
+.legend-color.missed {
+    background: var(--danger-light);
+    border: 1px solid var(--danger-border);
+}
+
+.legend-color.cancelled {
+    background: var(--warning-light);
+    border: 1px solid var(--warning-border);
+}
+
+/* Группа кнопок */
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+    .container {
+        overflow-x: auto;
+    }
+
+    .schedule-table {
+        min-width: 800px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .schedule-controls {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .week-navigation {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
