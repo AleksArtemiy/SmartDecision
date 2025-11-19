@@ -18,7 +18,17 @@
             Неверный логин или пароль
         </div>
 
+        <!-- Блок с выбранной ролью -->
+        <div class="selected-role" id="selected-role" style="display: none;">
+            <div class="role-badge">
+                <span id="role-icon">🎓</span>
+                <span id="role-text">Студент</span>
+            </div>
+        </div>
+
         <form id="login-form" action="auth.php" method="POST">
+            <input type="hidden" id="role" name="role" value="">
+            
             <div class="form-group">
                 <label class="form-label" for="username">Логин</label>
                 <input type="text" id="username" name="username" class="form-input" placeholder="Введите ваш логин" required>
@@ -27,29 +37,6 @@
             <div class="form-group">
                 <label class="form-label" for="password">Пароль</label>
                 <input type="password" id="password" name="password" class="form-input" placeholder="Введите ваш пароль" required>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Роль</label>
-                <div class="role-cards">
-                    <div class="role-card" data-role="student">
-                        <div class="role-icon">🎓</div>
-                        <div class="role-name">Студент</div>
-                    </div>
-                    <div class="role-card" data-role="headman">
-                        <div class="role-icon">👥</div>
-                        <div class="role-name">Староста</div>
-                    </div>
-                    <div class="role-card" data-role="teacher">
-                        <div class="role-icon">👨‍🏫</div>
-                        <div class="role-name">Преподаватель</div>
-                    </div>
-                    <div class="role-card" data-role="admin">
-                        <div class="role-icon">⚙️</div>
-                        <div class="role-name">Администратор</div>
-                    </div>
-                </div>
-                <input type="hidden" id="role" name="role" required>
             </div>
 
             <button type="submit" class="btn btn-primary">
@@ -86,7 +73,6 @@
             </div>
         </div>
     </div>
-
     <script src="js/login.js"></script>
 </body>
 </html>
