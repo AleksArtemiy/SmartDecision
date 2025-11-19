@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Журнал 2.0 - Расписание и Статистика</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --success-border: #059669;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --danger-border: #dc2626;
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            --warning-border: #d97706;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-400: #9ca3af;
+            --gray-600: #4b5563;
+            --gray-800: #1f2937;
+            --white: #ffffff;
+        }
+
+        body {
+            background-color: var(--gray-100);
+            color: var(--gray-800);
+        }
+
+        /* Шапка */
+        .header {
+            background: var(--white);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Основной контент */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Двухколоночный layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Управление расписанием */
+        .schedule-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .week-navigation {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .current-week {
+            font-weight: bold;
+            min-width: 200px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        /* Таблица расписания */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .schedule-table th {
+            background: var(--primary);
+            color: var(--white);
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            border: 1px solid var(--primary-dark);
+        }
+
+        .schedule-table td {
+            padding: 0.75rem;
+            border: 1px solid var(--gray-200);
+            text-align: center;
+            vertical-align: top;
+            height: 80px;
+        }
+
+        .time-column {
+            background: var(--gray-100);
+            font-weight: 500;
+            width: 80px;
+        }
+
+        .lecture-cell {
+            background: var(--primary-light);
+            border-radius: 0.25rem;
+            padding: 0.5rem;
+            margin: 0.125rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .lecture-cell.attended {
+            background: var(--success-light);
+            border-color: var(--success-border);
+        }
+
+        .lecture-cell.missed {
+            background: var(--danger-light);
+            border-color: var(--danger-border);
+        }
+
+        .lecture-cell.partial {
+            background: var(--warning-light);
+            border-color: var(--warning-border);
+        }
+
+        .lecture-cell:hover {
+            transform: scale(1.02);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .lecture-cell.clickable {
+            cursor: pointer;
+        }
+
+        .lecture-cell.empty {
+            background: transparent;
+            cursor: default;
+        }
+
+        .lecture-cell.empty:hover {
+            transform: none;
+            background: transparent;
+        }
+
+        .lecture-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .lecture-details {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+        }
+
+        .lecture-room {
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        .attendance-status {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .attendance-status.attended {
+            background: var(--success);
+        }
+
+        .attendance-status.missed {
+            background: var(--danger);
+        }
+
+        .attendance-status.partial {
+            background: var(--warning);
+        }
+
+        /* Статистика */
+        .stats-overview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-card.good {
+            border-left-color: var(--success);
+        }
+
+        .stat-card.warning {
+            border-left-color: var(--warning);
+        }
+
+        .stat-card.danger {
+            border-left-color: var(--danger);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value.good { color: var(--success); }
+        .stat-value.warning { color: var(--warning); }
+        .stat-value.danger { color: var(--danger); }
+
+        .stat-label {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.good { background: var(--success); }
+        .progress-fill.warning { background: var(--warning); }
+        .progress-fill.danger { background: var(--danger); }
+
+        /* Список студентов */
+        .students-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .student-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .student-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .student-name {
+            font-weight: 500;
+        }
+
+        .student-id {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        .attendance-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .attendance-badge.good {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .attendance-badge.warning {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .attendance-badge.danger {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+
+        /* Легенда */
+        .legend {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        .legend-color.future {
+            background: var(--primary-light);
+            border: 1px solid var(--primary);
+        }
+
+        .legend-color.attended {
+            background: var(--success-light);
+            border: 1px solid var(--success-border);
+        }
+
+        .legend-color.missed {
+            background: var(--danger-light);
+            border: 1px solid var(--danger-border);
+        }
+
+        .legend-color.partial {
+            background: var(--warning-light);
+            border: 1px solid var(--warning-border);
+        }
+
+        /* Кнопки */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-800);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-600);
+            color: var(--white);
+        }
+
+        .nav-btn {
+            background: transparent;
+            color: var(--gray-600);
+            border: 1px solid var(--gray-300);
+        }
+
+        .nav-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        /* Группа кнопок */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1024px) {
+            .container {
+                overflow-x: auto;
+            }
+
+            .schedule-table {
+                min-width: 800px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .schedule-controls {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .week-navigation {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .stats-overview {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Шапка -->
+<header class="header">
+    <div class="logo">Журнал 2.0</div>
+    <div class="user-menu">
+        <span>Староста: Петров И.С. | Группа: ПИ-201</span>
+    </div>
+</header>
+
+<!-- Основной контент -->
+<div class="container">
+    <!-- Дашборд с расписанием и статистикой -->
+    <div class="dashboard">
+        <!-- Расписание -->
+        <div class="card">
+            <div class="schedule-controls">
+                <h2>Расписание занятий</h2>
+                <div class="week-navigation">
+                    <button class="btn btn-secondary" id="prev-week">← Пред.</button>
+                    <div class="current-week" id="current-week">18 - 24 ноября 2024</div>
+                    <button class="btn btn-secondary" id="next-week">След. →</button>
+                </div>
+            </div>
+
+            <!-- Легенда -->
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color future"></div>
+                    <span>Предстоящие</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color attended"></div>
+                    <span>Посещена</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color missed"></div>
+                    <span>Пропущена</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color partial"></div>
+                    <span>Частично</span>
+                </div>
+            </div>
+
+            <table class="schedule-table">
+                <thead>
+                <tr>
+                    <th>Время</th>
+                    <th>Пн</th>
+                    <th>Вт</th>
+                    <th>Ср</th>
+                    <th>Чт</th>
+                    <th>Пт</th>
+                    <th>Сб</th>
+                </tr>
+                </thead>
+                <tbody id="schedule-body">
+                <!-- Таблица будет заполнена через JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Статистика -->
+        <div class="card">
+            <h2 style="margin-bottom: 1.5rem;">Статистика группы</h2>
+
+            <!-- Общая статистика -->
+            <div class="stats-overview">
+                <div class="stat-card good">
+                    <div class="stat-value good" id="total-attendance">87%</div>
+                    <div class="stat-label">Общая посещаемость</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill good" style="width: 87%"></div>
+                    </div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="stat-value warning" id="avg-per-student">84%</div>
+                    <div class="stat-label">Средняя по студенту</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill warning" style="width: 84%"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="total-lectures">64</div>
+                    <div class="stat-label">Всего пар</div>
+                </div>
+                <div class="stat-card danger">
+                    <div class="stat-value danger" id="risk-count">3</div>
+                    <div class="stat-label">В группе риска</div>
+                </div>
+            </div>
+
+            <!-- Список студентов -->
+            <h3 style="margin: 1.5rem 0 1rem 0;">Посещаемость студентов</h3>
+            <div class="students-list" id="students-stats">
+                <!-- Список будет заполнен через JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Кнопки действий -->
+    <div class="button-group">
+        <button class="btn btn-primary" id="export-all">Экспорт отчета</button>
+        <button class="btn btn-secondary" id="print-all">Распечатать</button>
+        <button class="btn btn-secondary" onclick="location.reload()">Обновить</button>
+    </div>
+</div>
+
+<script>
+    // Данные расписания
+    const scheduleData = {
+        "18 - 24 ноября 2024": {
+            "Понедельник": {
+                "9:00-10:30": { name: "Математический анализ", teacher: "Иванова А.С.", room: "301" },
+                "10:30-12:00": { name: "Программирование", teacher: "Петров С.В.", room: "415" },
+                "13:00-14:30": { name: "Базы данных", teacher: "Сидорова М.К.", room: "210" }
+            },
+            "Вторник": {
+                "9:00-10:30": { name: "Физика", teacher: "Козлов Д.И.", room: "305" },
+                "13:00-14:30": { name: "Английский язык", teacher: "Smith J.", room: "104" }
+            },
+            "Среда": {
+                "10:30-12:00": { name: "Математический анализ", teacher: "Иванова А.С.", room: "301" },
+                "14:30-16:00": { name: "Веб-разработка", teacher: "Петров С.В.", room: "415" }
+            },
+            "Четверг": {
+                "9:00-10:30": { name: "Алгоритмы", teacher: "Сидорова М.К.", room: "210" },
+                "12:00-13:30": { name: "Физкультура", teacher: "Волков А.Н.", room: "Спортзал" }
+            },
+            "Пятница": {
+                "11:00-12:30": { name: "Проектная деятельность", teacher: "Петров С.В.", room: "415" },
+                "14:30-16:00": { name: "Экономика", teacher: "Новикова Л.П.", room: "208" }
+            },
+            "Суббота": {
+                "9:00-10:30": { name: "Элективная дисциплина", teacher: "Смирнов П.К.", room: "305" }
+            }
+        }
+    };
+
+    // Данные студентов
+    const studentsData = [
+        { id: 1, name: "Иванов Алексей", attendance: 95 },
+        { id: 2, name: "Петрова Мария", attendance: 88 },
+        { id: 3, name: "Сидоров Владимир", attendance: 92 },
+        { id: 4, name: "Козлова Анна", attendance: 78 },
+        { id: 5, name: "Николаев Дмитрий", attendance: 85 },
+        { id: 6, name: "Орлова Екатерина", attendance: 91 },
+        { id: 7, name: "Федоров Максим", attendance: 67 },
+        { id: 8, name: "Семенова Ирина", attendance: 89 }
+    ];
+
+    // Временные интервалы
+    const timeSlots = [
+        "9:00-10:30",
+        "10:30-12:00",
+        "12:00-13:30",
+        "13:00-14:30",
+        "14:30-16:00"
+    ];
+
+    // Дни недели (сокращенные)
+    const daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
+    const daysShort = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
+
+    class DashboardManager {
+        constructor() {
+            this.currentWeek = Object.keys(scheduleData)[0];
+            this.init();
+        }
+
+        init() {
+            this.renderSchedule();
+            this.renderStats();
+            this.setupEventListeners();
+        }
+
+        getLectureStatus(day, time) {
+            const hash = this.stringToHash(day + time + this.currentWeek);
+
+            if (this.isPastLecture(day, time)) {
+                const statuses = ['attended', 'missed', 'partial'];
+                return statuses[hash % 3];
+            } else {
+                return 'future';
+            }
+        }
+
+        stringToHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return Math.abs(hash);
+        }
+
+        isPastLecture(day, time) {
+            const dayIndex = daysOfWeek.indexOf(day);
+            return dayIndex < 4;
+        }
+
+        getAttendanceBadgeClass(attendance) {
+            if (attendance >= 90) return 'good';
+            if (attendance >= 75) return 'warning';
+            return 'danger';
+        }
+
+        getAttendanceBadgeText(attendance) {
+            if (attendance >= 90) return 'Отлично';
+            if (attendance >= 75) return 'Хорошо';
+            return 'Риск';
+        }
+
+        openAttendanceJournal(day, time) {
+            const weekSchedule = scheduleData[this.currentWeek];
+            const daySchedule = weekSchedule[day];
+            const lecture = daySchedule[time];
+
+            if (lecture) {
+                const lectureData = {
+                    day: day,
+                    time: time,
+                    name: lecture.name,
+                    teacher: lecture.teacher,
+                    room: lecture.room,
+                    week: this.currentWeek
+                };
+
+                localStorage.setItem('currentLecture', JSON.stringify(lectureData));
+                window.location.href = 'attendance.html';
+            }
+        }
+
+        renderSchedule() {
+            const tbody = document.getElementById('schedule-body');
+            const weekSchedule = scheduleData[this.currentWeek];
+
+            tbody.innerHTML = timeSlots.map(time => {
+                const row = document.createElement('tr');
+
+                const timeCell = document.createElement('td');
+                timeCell.className = 'time-column';
+                timeCell.textContent = time;
+                row.appendChild(timeCell);
+
+                daysOfWeek.forEach((day, index) => {
+                    const dayCell = document.createElement('td');
+                    const daySchedule = weekSchedule[day] || {};
+                    const lecture = daySchedule[time];
+
+                    if (lecture) {
+                        const status = this.getLectureStatus(day, time);
+                        const isPast = this.isPastLecture(day, time);
+                        const clickableClass = isPast ? 'clickable' : '';
+
+                        dayCell.innerHTML = `
+                            <div class="lecture-cell ${status} ${clickableClass}"
+                                 data-time="${time}"
+                                 data-day="${day}"
+                                 data-past="${isPast}">
+                                <div class="attendance-status ${status}"></div>
+                                <div class="lecture-name">${lecture.name}</div>
+                                <div class="lecture-details">
+                                    ${lecture.teacher}<br>
+                                    <span class="lecture-room">${lecture.room}</span>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        dayCell.innerHTML = '<div class="lecture-cell empty"></div>';
+                    }
+
+                    row.appendChild(dayCell);
+                });
+
+                return row.outerHTML;
+            }).join('');
+        }
+
+        renderStats() {
+            const container = document.getElementById('students-stats');
+
+            // Сортируем студентов по посещаемости (от лучшей к худшей)
+            const sortedStudents = [...studentsData].sort((a, b) => b.attendance - a.attendance);
+
+            container.innerHTML = sortedStudents.map(student => {
+                const badgeClass = this.getAttendanceBadgeClass(student.attendance);
+                const badgeText = this.getAttendanceBadgeText(student.attendance);
+
+                return `
+                    <div class="student-item">
+                        <div class="student-info">
+                            <div class="student-name">${student.name}</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div class="progress-bar" style="width: 80px;">
+                                <div class="progress-fill ${badgeClass}" style="width: ${student.attendance}%"></div>
+                            </div>
+                            <span style="font-weight: 500; min-width: 40px;">${student.attendance}%</span>
+                            <span class="attendance-badge ${badgeClass}">${badgeText}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Обновляем общую статистику
+            const totalAttendance = Math.round(sortedStudents.reduce((sum, student) => sum + student.attendance, 0) / sortedStudents.length);
+            const riskCount = sortedStudents.filter(student => student.attendance < 75).length;
+
+            document.getElementById('total-attendance').textContent = totalAttendance + '%';
+            document.getElementById('avg-per-student').textContent = totalAttendance + '%';
+            document.getElementById('risk-count').textContent = riskCount;
+
+            document.querySelector('#total-attendance').closest('.stat-card').querySelector('.progress-fill').style.width = totalAttendance + '%';
+            document.querySelector('#avg-per-student').closest('.stat-card').querySelector('.progress-fill').style.width = totalAttendance + '%';
+        }
+
+        setupEventListeners() {
+            document.getElementById('prev-week').addEventListener('click', () => {
+                this.changeWeek(-1);
+            });
+
+            document.getElementById('next-week').addEventListener('click', () => {
+                this.changeWeek(1);
+            });
+
+            document.addEventListener('click', (e) => {
+                const lectureCell = e.target.closest('.lecture-cell.clickable');
+                if (lectureCell) {
+                    const time = lectureCell.dataset.time;
+                    const day = lectureCell.dataset.day;
+                    this.openAttendanceJournal(day, time);
+                }
+            });
+
+            document.getElementById('export-all').addEventListener('click', () => {
+                alert('Отчет экспортирован в PDF');
+            });
+
+            document.getElementById('print-all').addEventListener('click', () => {
+                window.print();
+            });
+        }
+
+        changeWeek(direction) {
+            alert(`Переход к ${direction > 0 ? 'следующей' : 'предыдущей'} неделе`);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        new DashboardManager();
+    });
+</script>
+</body>
+</html>

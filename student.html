@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Журнал 2.0 - Личный кабинет студента</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --success-border: #059669;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --danger-border: #dc2626;
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            --warning-border: #d97706;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-400: #9ca3af;
+            --gray-600: #4b5563;
+            --gray-800: #1f2937;
+            --white: #ffffff;
+        }
+
+        body {
+            background-color: var(--gray-100);
+            color: var(--gray-800);
+        }
+
+        /* Шапка */
+        .header {
+            background: var(--white);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Основной контент */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Двухколоночный layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Управление расписанием */
+        .schedule-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .week-navigation {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .current-week {
+            font-weight: bold;
+            min-width: 200px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        /* Таблица расписания */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .schedule-table th {
+            background: var(--primary);
+            color: var(--white);
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            border: 1px solid var(--primary-dark);
+        }
+
+        .schedule-table td {
+            padding: 0.75rem;
+            border: 1px solid var(--gray-200);
+            text-align: center;
+            vertical-align: top;
+            height: 80px;
+        }
+
+        .time-column {
+            background: var(--gray-100);
+            font-weight: 500;
+            width: 80px;
+        }
+
+        .lecture-cell {
+            background: var(--primary-light);
+            border-radius: 0.25rem;
+            padding: 0.5rem;
+            margin: 0.125rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .lecture-cell.attended {
+            background: var(--success-light);
+            border-color: var(--success-border);
+        }
+
+        .lecture-cell.missed {
+            background: var(--danger-light);
+            border-color: var(--danger-border);
+        }
+
+        .lecture-cell.cancelled {
+            background: var(--warning-light);
+            border-color: var(--warning-border);
+        }
+
+        .lecture-cell:hover {
+            transform: scale(1.02);
+        }
+
+        .lecture-cell.empty {
+            background: transparent;
+            cursor: default;
+        }
+
+        .lecture-cell.empty:hover {
+            transform: none;
+            background: transparent;
+        }
+
+        .lecture-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .lecture-details {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+        }
+
+        .lecture-room {
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        .attendance-status {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .attendance-status.attended {
+            background: var(--success);
+        }
+
+        .attendance-status.missed {
+            background: var(--danger);
+        }
+
+        .attendance-status.cancelled {
+            background: var(--warning);
+        }
+
+        /* Статистика по предметам */
+        .stats-overview {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-card.good {
+            border-left-color: var(--success);
+        }
+
+        .stat-card.warning {
+            border-left-color: var(--warning);
+        }
+
+        .stat-card.danger {
+            border-left-color: var(--danger);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value.good { color: var(--success); }
+        .stat-value.warning { color: var(--warning); }
+        .stat-value.danger { color: var(--danger); }
+
+        .stat-label {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.good { background: var(--success); }
+        .progress-fill.warning { background: var(--warning); }
+        .progress-fill.danger { background: var(--danger); }
+
+        /* Список предметов */
+        .subjects-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .subject-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .subject-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .subject-name {
+            font-weight: 500;
+        }
+
+        .subject-teacher {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        .attendance-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .attendance-badge.good {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .attendance-badge.warning {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .attendance-badge.danger {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+
+        /* Легенда */
+        .legend {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        .legend-color.future {
+            background: var(--primary-light);
+            border: 1px solid var(--primary);
+        }
+
+        .legend-color.attended {
+            background: var(--success-light);
+            border: 1px solid var(--success-border);
+        }
+
+        .legend-color.missed {
+            background: var(--danger-light);
+            border: 1px solid var(--danger-border);
+        }
+
+        .legend-color.cancelled {
+            background: var(--warning-light);
+            border: 1px solid var(--warning-border);
+        }
+
+        /* Кнопки */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-800);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-600);
+            color: var(--white);
+        }
+
+        /* Группа кнопок */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1024px) {
+            .container {
+                overflow-x: auto;
+            }
+
+            .schedule-table {
+                min-width: 800px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .schedule-controls {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .week-navigation {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Шапка -->
+<header class="header">
+    <a href="index.html" class="logo">Журнал 2.0</a>
+    <div class="user-menu">
+        <span>Студент: Иванов А.С. | Группа: ПИ-201</span>
+    </div>
+</header>
+
+<!-- Основной контент -->
+<div class="container">
+    <div class="dashboard">
+        <!-- Расписание -->
+        <div class="card">
+            <div class="schedule-controls">
+                <h2>Мое расписание</h2>
+                <div class="week-navigation">
+                    <button class="btn btn-secondary" id="prev-week">← Пред.</button>
+                    <div class="current-week" id="current-week">18 - 24 ноября 2024</div>
+                    <button class="btn btn-secondary" id="next-week">След. →</button>
+                </div>
+            </div>
+
+            <!-- Легенда -->
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color future"></div>
+                    <span>Предстоящие</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color attended"></div>
+                    <span>Я присутствовал</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color missed"></div>
+                    <span>Я отсутствовал</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color cancelled"></div>
+                    <span>Пара отменена</span>
+                </div>
+            </div>
+
+            <table class="schedule-table">
+                <thead>
+                <tr>
+                    <th>Время</th>
+                    <th>Пн</th>
+                    <th>Вт</th>
+                    <th>Ср</th>
+                    <th>Чт</th>
+                    <th>Пт</th>
+                    <th>Сб</th>
+                </tr>
+                </thead>
+                <tbody id="schedule-body">
+                <!-- Таблица будет заполнена через JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Статистика по предметам -->
+        <div class="card">
+            <h2 style="margin-bottom: 1.5rem;">Статистика по предметам</h2>
+
+            <!-- Общая статистика -->
+            <div class="stats-overview">
+                <div class="stat-card good">
+                    <div class="stat-value good" id="total-attendance">87%</div>
+                    <div class="stat-label">Общая посещаемость</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill good" style="width: 87%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Список предметов -->
+            <h3 style="margin: 1.5rem 0 1rem 0;">Посещаемость по предметам</h3>
+            <div class="subjects-list" id="subjects-stats">
+                <!-- Список будет заполнен через JavaScript -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Данные расписания с персональной посещаемостью
+    const scheduleData = {
+        "18 - 24 ноября 2024": {
+            "Понедельник": {
+                "9:00-10:30": { name: "Математический анализ", teacher: "Иванова А.С.", room: "301", status: "attended" },
+                "10:30-12:00": { name: "Программирование", teacher: "Петров С.В.", room: "415", status: "attended" },
+                "13:00-14:30": { name: "Базы данных", teacher: "Сидорова М.К.", room: "210", status: "missed" }
+            },
+            "Вторник": {
+                "9:00-10:30": { name: "Физика", teacher: "Козлов Д.И.", room: "305", status: "attended" },
+                "13:00-14:30": { name: "Английский язык", teacher: "Smith J.", room: "104", status: "cancelled" }
+            },
+            "Среда": {
+                "10:30-12:00": { name: "Математический анализ", teacher: "Иванова А.С.", room: "301", status: "attended" },
+                "14:30-16:00": { name: "Веб-разработка", teacher: "Петров С.В.", room: "415", status: "future" }
+            },
+            "Четверг": {
+                "9:00-10:30": { name: "Алгоритмы", teacher: "Сидорова М.К.", room: "210", status: "attended" },
+                "12:00-13:30": { name: "Физкультура", teacher: "Волков А.Н.", room: "Спортзал", status: "missed" }
+            },
+            "Пятница": {
+                "11:00-12:30": { name: "Проектная деятельность", teacher: "Петров С.В.", room: "415", status: "future" },
+                "14:30-16:00": { name: "Экономика", teacher: "Новикова Л.П.", room: "208", status: "future" }
+            },
+            "Суббота": {
+                "9:00-10:30": { name: "Элективная дисциплина", teacher: "Смирнов П.К.", room: "305", status: "future" }
+            }
+        }
+    };
+
+    // Статистика по предметам
+    const subjectsData = [
+        { name: "Математический анализ", teacher: "Иванова А.С.", attendance: 92, attended: 11, missed: 1, total: 12 },
+        { name: "Программирование", teacher: "Петров С.В.", attendance: 88, attended: 7, missed: 1, total: 8 },
+        { name: "Физика", teacher: "Козлов Д.И.", attendance: 85, attended: 6, missed: 1, total: 7 },
+        { name: "Английский язык", teacher: "Smith J.", attendance: 80, attended: 4, missed: 1, total: 5 },
+        { name: "Базы данных", teacher: "Сидорова М.К.", attendance: 75, attended: 3, missed: 1, total: 4 },
+        { name: "Алгоритмы", teacher: "Сидорова М.К.", attendance: 90, attended: 9, missed: 1, total: 10 },
+        { name: "Физкультура", teacher: "Волков А.Н.", attendance: 70, attended: 7, missed: 3, total: 10 }
+    ];
+
+    // Временные интервалы
+    const timeSlots = [
+        "9:00-10:30",
+        "10:30-12:00",
+        "12:00-13:30",
+        "13:00-14:30",
+        "14:30-16:00"
+    ];
+
+    // Дни недели
+    const daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
+    const daysShort = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
+
+    class StudentDashboard {
+        constructor() {
+            this.currentWeek = Object.keys(scheduleData)[0];
+            this.init();
+        }
+
+        init() {
+            this.renderSchedule();
+            this.renderSubjectsStats();
+            this.setupEventListeners();
+        }
+
+        getAttendanceBadgeClass(attendance) {
+            if (attendance >= 90) return 'good';
+            if (attendance >= 75) return 'warning';
+            return 'danger';
+        }
+
+        getAttendanceBadgeText(attendance) {
+            if (attendance >= 90) return 'Отлично';
+            if (attendance >= 75) return 'Хорошо';
+            return 'Низкая';
+        }
+
+        renderSchedule() {
+            const tbody = document.getElementById('schedule-body');
+            const weekSchedule = scheduleData[this.currentWeek];
+
+            tbody.innerHTML = timeSlots.map(time => {
+                const row = document.createElement('tr');
+
+                // Колонка времени
+                const timeCell = document.createElement('td');
+                timeCell.className = 'time-column';
+                timeCell.textContent = time;
+                row.appendChild(timeCell);
+
+                // Колонки для каждого дня
+                daysOfWeek.forEach((day, index) => {
+                    const dayCell = document.createElement('td');
+                    const daySchedule = weekSchedule[day] || {};
+                    const lecture = daySchedule[time];
+
+                    if (lecture) {
+                        dayCell.innerHTML = `
+                            <div class="lecture-cell ${lecture.status}"
+                                 data-time="${time}"
+                                 data-day="${day}">
+                                ${lecture.status !== 'future' ? `<div class="attendance-status ${lecture.status}"></div>` : ''}
+                                <div class="lecture-name">${lecture.name}</div>
+                                <div class="lecture-details">
+                                    ${lecture.teacher}<br>
+                                    <span class="lecture-room">${lecture.room}</span>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        dayCell.innerHTML = '<div class="lecture-cell empty"></div>';
+                    }
+
+                    row.appendChild(dayCell);
+                });
+
+                return row.outerHTML;
+            }).join('');
+        }
+
+        renderSubjectsStats() {
+            const container = document.getElementById('subjects-stats');
+
+            // Сортируем предметы по посещаемости (от лучшей к худшей)
+            const sortedSubjects = [...subjectsData].sort((a, b) => b.attendance - a.attendance);
+
+            container.innerHTML = sortedSubjects.map(subject => {
+                const badgeClass = this.getAttendanceBadgeClass(subject.attendance);
+                const badgeText = this.getAttendanceBadgeText(subject.attendance);
+
+                return `
+                    <div class="subject-item">
+                        <div class="subject-info">
+                            <div class="subject-name">${subject.name}</div>
+                            <div class="subject-teacher">${subject.teacher}</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div class="progress-bar" style="width: 80px;">
+                                <div class="progress-fill ${badgeClass}" style="width: ${subject.attendance}%"></div>
+                            </div>
+                            <span style="font-weight: 500; min-width: 40px;">${subject.attendance}%</span>
+                            <span class="attendance-badge ${badgeClass}">${badgeText}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Обновляем общую статистику
+            const totalAttendance = Math.round(sortedSubjects.reduce((sum, subject) => sum + subject.attendance, 0) / sortedSubjects.length);
+            document.getElementById('total-attendance').textContent = totalAttendance + '%';
+            document.querySelector('#total-attendance').closest('.stat-card').querySelector('.progress-fill').style.width = totalAttendance + '%';
+        }
+
+        setupEventListeners() {
+            document.getElementById('prev-week').addEventListener('click', () => {
+                this.changeWeek(-1);
+            });
+
+            document.getElementById('next-week').addEventListener('click', () => {
+                this.changeWeek(1);
+            });
+
+            // Клики по ячейкам с парами (для просмотра деталей)
+            document.addEventListener('click', (e) => {
+                const lectureCell = e.target.closest('.lecture-cell:not(.empty)');
+                if (lectureCell) {
+                    const time = lectureCell.dataset.time;
+                    const day = lectureCell.dataset.day;
+                    this.showLectureDetails(time, day);
+                }
+            });
+        }
+
+        showLectureDetails(time, day) {
+            const weekSchedule = scheduleData[this.currentWeek];
+            const daySchedule = weekSchedule[day];
+            const lecture = daySchedule[time];
+
+            if (lecture) {
+                const statusText = {
+                    'attended': '✅ Вы присутствовали',
+                    'missed': '❌ Вы отсутствовали',
+                    'cancelled': '⚠️ Пара отменена',
+                    'future': '⏳ Пара еще не состоялась'
+                };
+
+                alert(`Детали пары:\n\n📅 День: ${day}\n⏰ Время: ${time}\n📚 Предмет: ${lecture.name}\n👨‍🏫 Преподаватель: ${lecture.teacher}\n🏫 Аудитория: ${lecture.room}\n\n${statusText[lecture.status]}`);
+            }
+        }
+
+        changeWeek(direction) {
+            alert(`Переход к ${direction > 0 ? 'следующей' : 'предыдущей'} неделе`);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        new StudentDashboard();
+    });
+</script>
+</body>
+</html>

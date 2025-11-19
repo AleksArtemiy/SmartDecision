@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Журнал 2.0 - Панель администратора</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --success-border: #059669;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --danger-border: #dc2626;
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            --warning-border: #d97706;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-400: #9ca3af;
+            --gray-600: #4b5563;
+            --gray-800: #1f2937;
+            --white: #ffffff;
+        }
+
+        body {
+            background-color: var(--gray-100);
+            color: var(--gray-800);
+        }
+
+        /* Шапка */
+        .header {
+            background: var(--white);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Основной контент */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Общая статистика */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-card.good {
+            border-left-color: var(--success);
+        }
+
+        .stat-card.warning {
+            border-left-color: var(--warning);
+        }
+
+        .stat-card.danger {
+            border-left-color: var(--danger);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value.good { color: var(--success); }
+        .stat-value.warning { color: var(--warning); }
+        .stat-value.danger { color: var(--danger); }
+
+        .stat-label {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.good { background: var(--success); }
+        .progress-fill.warning { background: var(--warning); }
+        .progress-fill.danger { background: var(--danger); }
+
+        /* Таблицы */
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table th {
+            background: var(--primary);
+            color: var(--white);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .data-table th:hover {
+            background: var(--primary-dark);
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .data-table tr:hover {
+            background: var(--gray-100);
+        }
+
+        /* Бейджи статусов */
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .status-badge.good {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .status-badge.warning {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .status-badge.danger {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+
+        /* Фильтры и поиск */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        select, input {
+            padding: 0.5rem;
+            border: 1px solid var(--gray-200);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            min-width: 150px;
+        }
+
+        /* Вкладки */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .tab:hover {
+            background: var(--gray-100);
+        }
+
+        .tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Действия */
+        .actions-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* Кнопки */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-800);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-600);
+            color: var(--white);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .btn-success:hover {
+            background: #0da271;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .actions-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                border-bottom: none;
+                border-left: 2px solid transparent;
+            }
+
+            .tab.active {
+                border-left-color: var(--primary);
+                border-bottom-color: transparent;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Шапка -->
+<header class="header">
+    <a href="index.html" class="logo">Журнал 2.0 - Админпанель</a>
+    <div class="user-menu">
+        <span>Администратор: Деканат</span>
+        <button class="btn btn-secondary">Выйти</button>
+    </div>
+</header>
+
+<!-- Основной контент -->
+<div class="container">
+    <!-- Общая статистика -->
+    <div class="stats-grid">
+        <div class="stat-card good">
+            <div class="stat-value good">1,247</div>
+            <div class="stat-label">Всего студентов</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">84</div>
+            <div class="stat-label">Учебных групп</div>
+        </div>
+        <div class="stat-card warning">
+            <div class="stat-value warning">78%</div>
+            <div class="stat-label">Общая посещаемость</div>
+            <div class="progress-bar">
+                <div class="progress-fill warning" style="width: 78%"></div>
+            </div>
+        </div>
+        <div class="stat-card danger">
+            <div class="stat-value danger">67</div>
+            <div class="stat-label">Студентов в группе риска</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">42</div>
+            <div class="stat-label">Преподавателей</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">156</div>
+            <div class="stat-label">Учебных дисциплин</div>
+        </div>
+    </div>
+
+    <!-- Вкладки -->
+    <div class="tabs">
+        <div class="tab active" data-tab="groups">Группы</div>
+        <div class="tab" data-tab="students">Студенты</div>
+        <div class="tab" data-tab="teachers">Преподаватели</div>
+        <div class="tab" data-tab="reports">Отчеты</div>
+    </div>
+
+    <!-- Вкладка Группы -->
+    <div id="groups" class="tab-content active">
+        <div class="actions-bar">
+            <h2>Учебные группы</h2>
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-primary" id="export-groups">Экспорт</button>
+                <button class="btn btn-success" id="add-group">Добавить группу</button>
+            </div>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label class="filter-label">Факультет:</label>
+                <select id="faculty-filter">
+                    <option value="all">Все факультеты</option>
+                    <option value="fit">ФИТ</option>
+                    <option value="ef">ЭФ</option>
+                    <option value="mf">МФ</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Курс:</label>
+                <select id="course-filter">
+                    <option value="all">Все курсы</option>
+                    <option value="1">1 курс</option>
+                    <option value="2">2 курс</option>
+                    <option value="3">3 курс</option>
+                    <option value="4">4 курс</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Статус:</label>
+                <select id="status-filter">
+                    <option value="all">Все статусы</option>
+                    <option value="good">Хорошая посещаемость</option>
+                    <option value="warning">Средняя посещаемость</option>
+                    <option value="danger">Низкая посещаемость</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Поиск:</label>
+                <input type="text" id="group-search" placeholder="Поиск по группам...">
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table" id="groups-table">
+                <thead>
+                <tr>
+                    <th data-sort="name">Группа</th>
+                    <th data-sort="faculty">Факультет</th>
+                    <th data-sort="course">Курс</th>
+                    <th data-sort="students">Студентов</th>
+                    <th data-sort="attendance">Посещаемость</th>
+                    <th data-sort="risk">В группе риска</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+                </tr>
+                </thead>
+                <tbody id="groups-body">
+                <!-- Данные будут заполнены через JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Вкладка Студенты -->
+    <div id="students" class="tab-content">
+        <div class="actions-bar">
+            <h2>Студенты</h2>
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-primary" id="export-students">Экспорт</button>
+                <button class="btn btn-success" id="add-student">Добавить студента</button>
+            </div>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label class="filter-label">Группа:</label>
+                <select id="group-filter">
+                    <option value="all">Все группы</option>
+                    <!-- Группы будут заполнены через JavaScript -->
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Статус:</label>
+                <select id="student-status-filter">
+                    <option value="all">Все статусы</option>
+                    <option value="good">Хорошая посещаемость</option>
+                    <option value="warning">Средняя посещаемость</option>
+                    <option value="danger">В группе риска</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Поиск:</label>
+                <input type="text" id="student-search" placeholder="Поиск по студентам...">
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table" id="students-table">
+                <thead>
+                <tr>
+                    <th data-sort="name">Студент</th>
+                    <th data-sort="group">Группа</th>
+                    <th data-sort="id">№ студенческого</th>
+                    <th data-sort="attendance">Посещаемость</th>
+                    <th data-sort="present">Присутствовал</th>
+                    <th data-sort="absent">Пропущено</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+                </tr>
+                </thead>
+                <tbody id="students-body">
+                <!-- Данные будут заполнены через JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Вкладка Преподаватели -->
+    <div id="teachers" class="tab-content">
+        <div class="actions-bar">
+            <h2>Преподаватели</h2>
+            <button class="btn btn-success" id="add-teacher">Добавить преподавателя</button>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table" id="teachers-table">
+                <thead>
+                <tr>
+                    <th>Преподаватель</th>
+                    <th>Должность</th>
+                    <th>Факультет</th>
+                    <th>Групп</th>
+                    <th>Дисциплин</th>
+                    <th>Средняя посещаемость</th>
+                    <th>Действия</th>
+                </tr>
+                </thead>
+                <tbody id="teachers-body">
+                <!-- Данные будут заполнены через JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Вкладка Отчеты -->
+    <div id="reports" class="tab-content">
+        <div class="actions-bar">
+            <h2>Отчеты и аналитика</h2>
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-primary" id="generate-report">Сформировать отчет</button>
+                <button class="btn btn-secondary" id="export-all-data">Экспорт всех данных</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-bottom: 1rem;">Быстрые отчеты</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                <div class="stat-card">
+                    <div class="stat-value">📊</div>
+                    <div class="stat-label">Отчет по посещаемости</div>
+                    <button class="btn btn-secondary" style="margin-top: 1rem; width: 100%;">Скачать PDF</button>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">📈</div>
+                    <div class="stat-label">Аналитика по факультетам</div>
+                    <button class="btn btn-secondary" style="margin-top: 1rem; width: 100%;">Скачать Excel</button>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">⚠️</div>
+                    <div class="stat-label">Студенты группы риска</div>
+                    <button class="btn btn-secondary" style="margin-top: 1rem; width: 100%;">Скачать отчет</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Данные для админпанели
+    const adminData = {
+        groups: [
+            { name: "ПИ-201", faculty: "ФИТ", course: 2, students: 25, attendance: 87, riskCount: 2 },
+            { name: "ПИ-202", faculty: "ФИТ", course: 2, students: 24, attendance: 78, riskCount: 5 },
+            { name: "ПИ-203", faculty: "ФИТ", course: 2, students: 23, attendance: 92, riskCount: 1 },
+            { name: "ИВТ-201", faculty: "ФИТ", course: 2, students: 28, attendance: 81, riskCount: 3 },
+            { name: "МАТ-101", faculty: "МФ", course: 1, students: 30, attendance: 75, riskCount: 8 },
+            { name: "ФИЗ-101", faculty: "МФ", course: 1, students: 26, attendance: 69, riskCount: 7 },
+            { name: "ЭК-201", faculty: "ЭФ", course: 2, students: 22, attendance: 85, riskCount: 2 },
+            { name: "МЕН-301", faculty: "ЭФ", course: 3, students: 20, attendance: 88, riskCount: 1 }
+        ],
+        students: [
+            { name: "Иванов Алексей", group: "ПИ-201", id: "201001", attendance: 95, present: 57, absent: 3 },
+            { name: "Петрова Мария", group: "ПИ-201", id: "201002", attendance: 88, present: 53, absent: 7 },
+            { name: "Сидоров Владимир", group: "ПИ-202", id: "201003", attendance: 67, present: 40, absent: 20 },
+            { name: "Козлова Анна", group: "ПИ-202", id: "201004", attendance: 78, present: 47, absent: 13 },
+            { name: "Николаев Дмитрий", group: "ПИ-203", id: "201005", attendance: 92, present: 55, absent: 5 },
+            { name: "Орлова Екатерина", group: "ИВТ-201", id: "201006", attendance: 81, present: 49, absent: 11 },
+            { name: "Федоров Максим", group: "МАТ-101", id: "201007", attendance: 45, present: 27, absent: 33 },
+            { name: "Семенова Ирина", group: "ФИЗ-101", id: "201008", attendance: 72, present: 43, absent: 17 }
+        ],
+        teachers: [
+            { name: "Иванова Анна Сергеевна", position: "Доцент", faculty: "ФИТ", groups: 8, subjects: 3, attendance: 84 },
+            { name: "Петров Сергей Владимирович", position: "Профессор", faculty: "ФИТ", groups: 6, subjects: 2, attendance: 79 },
+            { name: "Сидорова Мария Константиновна", position: "Старший преподаватель", faculty: "ФИТ", groups: 4, subjects: 2, attendance: 88 },
+            { name: "Козлов Дмитрий Иванович", position: "Доцент", faculty: "МФ", groups: 5, subjects: 1, attendance: 72 },
+            { name: "Новикова Лариса Петровна", position: "Профессор", faculty: "ЭФ", groups: 3, subjects: 1, attendance: 85 }
+        ]
+    };
+
+    class AdminDashboard {
+        constructor() {
+            this.currentTab = 'groups';
+            this.init();
+        }
+
+        init() {
+            this.renderGroups();
+            this.renderStudents();
+            this.renderTeachers();
+            this.setupEventListeners();
+        }
+
+        getAttendanceStatus(attendance) {
+            if (attendance >= 85) return { class: 'good', text: 'Высокая' };
+            if (attendance >= 70) return { class: 'warning', text: 'Средняя' };
+            return { class: 'danger', text: 'Низкая' };
+        }
+
+        renderGroups() {
+            const tbody = document.getElementById('groups-body');
+
+            tbody.innerHTML = adminData.groups.map(group => {
+                const status = this.getAttendanceStatus(group.attendance);
+
+                return `
+                    <tr>
+                        <td><strong>${group.name}</strong></td>
+                        <td>${group.faculty}</td>
+                        <td>${group.course} курс</td>
+                        <td>${group.students}</td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div class="progress-bar" style="width: 80px;">
+                                    <div class="progress-fill ${status.class}" style="width: ${group.attendance}%"></div>
+                                </div>
+                                <span>${group.attendance}%</span>
+                            </div>
+                        </td>
+                        <td>${group.riskCount} студентов</td>
+                        <td>
+                            <span class="status-badge ${status.class}">${status.text}</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Подробнее</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        renderStudents() {
+            const tbody = document.getElementById('students-body');
+            const groupFilter = document.getElementById('group-filter');
+
+            // Заполняем фильтр групп
+            const uniqueGroups = [...new Set(adminData.students.map(s => s.group))];
+            groupFilter.innerHTML = '<option value="all">Все группы</option>' +
+                uniqueGroups.map(group => `<option value="${group}">${group}</option>`).join('');
+
+            tbody.innerHTML = adminData.students.map(student => {
+                const status = this.getAttendanceStatus(student.attendance);
+
+                return `
+                    <tr>
+                        <td>${student.name}</td>
+                        <td>${student.group}</td>
+                        <td>${student.id}</td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div class="progress-bar" style="width: 80px;">
+                                    <div class="progress-fill ${status.class}" style="width: ${student.attendance}%"></div>
+                                </div>
+                                <span>${student.attendance}%</span>
+                            </div>
+                        </td>
+                        <td>${student.present}</td>
+                        <td>${student.absent}</td>
+                        <td>
+                            <span class="status-badge ${status.class}">${status.text}</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">История</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        renderTeachers() {
+            const tbody = document.getElementById('teachers-body');
+
+            tbody.innerHTML = adminData.teachers.map(teacher => {
+                const status = this.getAttendanceStatus(teacher.attendance);
+
+                return `
+                    <tr>
+                        <td><strong>${teacher.name}</strong></td>
+                        <td>${teacher.position}</td>
+                        <td>${teacher.faculty}</td>
+                        <td>${teacher.groups}</td>
+                        <td>${teacher.subjects}</td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div class="progress-bar" style="width: 80px;">
+                                    <div class="progress-fill ${status.class}" style="width: ${teacher.attendance}%"></div>
+                                </div>
+                                <span>${teacher.attendance}%</span>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Нагрузка</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        setupEventListeners() {
+            // Переключение вкладок
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.dataset.tab;
+                    this.switchTab(tabId);
+                });
+            });
+
+            // Кнопки экспорта
+            document.getElementById('export-groups').addEventListener('click', () => {
+                alert('Экспорт данных по группам в Excel');
+            });
+
+            document.getElementById('export-students').addEventListener('click', () => {
+                alert('Экспорт данных по студентам в Excel');
+            });
+
+            document.getElementById('generate-report').addEventListener('click', () => {
+                alert('Формирование общего отчета...');
+            });
+
+            document.getElementById('export-all-data').addEventListener('click', () => {
+                alert('Экспорт всех данных системы');
+            });
+
+            // Кнопки добавления
+            document.getElementById('add-group').addEventListener('click', () => {
+                alert('Добавление новой учебной группы');
+            });
+
+            document.getElementById('add-student').addEventListener('click', () => {
+                alert('Добавление нового студента');
+            });
+
+            document.getElementById('add-teacher').addEventListener('click', () => {
+                alert('Добавление нового преподавателя');
+            });
+
+            // Сортировка таблиц
+            document.querySelectorAll('.data-table th[data-sort]').forEach(th => {
+                th.addEventListener('click', () => {
+                    const table = th.closest('table');
+                    const tbody = table.querySelector('tbody');
+                    const rows = Array.from(tbody.querySelectorAll('tr'));
+                    const sortField = th.dataset.sort;
+
+                    rows.sort((a, b) => {
+                        const aValue = a.cells[Array.from(th.parentNode.cells).indexOf(th)].textContent;
+                        const bValue = b.cells[Array.from(th.parentNode.cells).indexOf(th)].textContent;
+                        return aValue.localeCompare(bValue);
+                    });
+
+                    tbody.innerHTML = '';
+                    rows.forEach(row => tbody.appendChild(row));
+                });
+            });
+        }
+
+        switchTab(tabId) {
+            // Обновляем активную вкладку
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+            this.currentTab = tabId;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        new AdminDashboard();
+    });
+</script>
+</body>
+</html>
