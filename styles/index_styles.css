@@ -1,0 +1,176 @@
+body {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.login-container {
+    background: var(--white);
+    border-radius: 1rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.login-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--success));
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.logo h1 {
+    color: var(--primary);
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.logo p {
+    color: var(--gray-600);
+    font-size: 1rem;
+}
+
+.role-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.role-card {
+    border: 2px solid var(--gray-200);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--white);
+}
+
+.role-card:hover {
+    border-color: var(--primary-light);
+    transform: translateY(-2px);
+}
+
+.role-card.selected {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.role-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.role-name {
+    font-weight: 500;
+    color: var(--gray-800);
+    font-size: 0.875rem;
+}
+
+.demo-accounts {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--gray-200);
+}
+
+.demo-title {
+    text-align: center;
+    color: var(--gray-600);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.demo-account {
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.875rem;
+}
+
+.demo-account:hover {
+    background: var(--primary-light);
+    border-color: var(--primary);
+}
+
+.demo-role {
+    font-weight: 500;
+    color: var(--primary);
+}
+
+.demo-info {
+    color: var(--gray-600);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.forgot-password {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.forgot-password a {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.875rem;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    background: var(--danger-light);
+    color: var(--danger);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    text-align: center;
+    display: none;
+}
+
+.error-message.show {
+    display: block;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+    .login-container {
+        padding: 1.5rem;
+    }
+
+    .role-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .logo h1 {
+        font-size: 1.75rem;
+    }
+}
