@@ -47,7 +47,7 @@ class LoginForm {
 
         // Выделяем выбранную карточку
         document.querySelector(`[data-role="${role}"]`).classList.add('selected');
-        
+
         // Сохраняем выбранную роль
         this.selectedRole = role;
         document.getElementById('role').value = role;
@@ -64,7 +64,7 @@ class LoginForm {
         };
 
         const account = demoAccounts[accountType];
-        
+
         document.getElementById('username').value = account.username;
         document.getElementById('password').value = account.password;
         this.selectRole(account.role);
@@ -107,7 +107,7 @@ class LoginForm {
         };
 
         const account = validAccounts[role];
-        
+
         if (account && username === account.username && password === account.password) {
             // Успешный вход - отправляем форму
             this.submitForm();
