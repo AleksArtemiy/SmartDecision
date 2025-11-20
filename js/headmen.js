@@ -231,11 +231,7 @@ class DashboardManager {
         const lecture = daySchedule[time];
 
         if (lecture) {
-            // ПРОВЕРЯЕМ ДОСТУП ПЕРЕД ОТКРЫТИЕМ ЖУРНАЛА
-            if (!this.canEditLecture(day, time)) {
-                this.showNotification('Редактирование посещаемости для прошедших пар недоступно', 'warning');
-                return;
-            }
+            const canEdit = this.canEditLecture(day, time);
 
             const lectureData = {
                 day: day,
@@ -244,11 +240,15 @@ class DashboardManager {
                 teacher: lecture.teacher,
                 room: lecture.room,
                 week: this.currentWeek,
-                canEdit: this.canEditLecture(day, time)
+                canEdit: canEdit
             };
 
-            localStorage.setItem('currentLecture', JSON.stringify(lectureData));
-            window.location.href = 'attendance.php';
+            // Передаем данные через URL параметры
+            const queryString = new URLSearchParams({
+                lecture_data: JSON.stringify(lectureData)
+            }).toString();
+
+            window.location.href = `attendance.php?${queryString}`;
         }
     }
 
