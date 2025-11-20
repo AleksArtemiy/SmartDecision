@@ -6,19 +6,34 @@ const scheduleData = {
                 name: "Математический анализ",
                 teacher: "Иванова А.С.",
                 room: "301",
-                canEdit: false // Прошедшая пара - нельзя редактировать
+                canEdit: false, // Прошедшая пара - нельзя редактировать
+                attendance: {
+                    present: ["Иванов Алексей", "Петрова Мария", "Козлова Анна"],
+                    absent: ["Сидоров Владимир"],
+                    total: 4
+                }
             },
             "10:30-12:00": {
                 name: "Программирование",
                 teacher: "Петров С.В.",
                 room: "415",
-                canEdit: false // Прошедшая пара - нельзя редактировать
+                canEdit: false, // Прошедшая пара - нельзя редактировать
+                attendance: {
+                    present: ["Петрова Мария", "Сидоров Владимир"],
+                    absent: ["Иванов Алексей", "Козлова Анна"],
+                    total: 4
+                }
             },
             "13:00-14:30": {
                 name: "Базы данных",
                 teacher: "Сидорова М.К.",
                 room: "210",
-                canEdit: false // Прошедшая пара - нельзя редактировать
+                canEdit: false, // Прошедшая пара - нельзя редактировать
+                attendance: {
+                    present: ["Иванов Алексей", "Петрова Мария", "Сидоров Владимир", "Козлова Анна"],
+                    absent: [],
+                    total: 4
+                }
             }
         },
         "Вторник": {
@@ -26,13 +41,15 @@ const scheduleData = {
                 name: "Физика",
                 teacher: "Козлов Д.И.",
                 room: "305",
-                canEdit: false // Прошедшая пара - нельзя редактировать
+                canEdit: true, // Текущий день - можно редактировать
+                attendance: null
             },
             "13:00-14:30": {
                 name: "Английский язык",
                 teacher: "Smith J.",
                 room: "104",
-                canEdit: true // Текущий день - можно редактировать
+                canEdit: true, // Текущий день - можно редактировать
+                attendance: null
             }
         },
         "Среда": {
@@ -40,13 +57,15 @@ const scheduleData = {
                 name: "Математический анализ",
                 teacher: "Иванова А.С.",
                 room: "301",
-                canEdit: true // Будущая пара - можно редактировать
+                canEdit: true, // Будущая пара - можно редактировать
+                attendance: null
             },
             "14:30-16:00": {
                 name: "Веб-разработка",
                 teacher: "Петров С.В.",
                 room: "415",
-                canEdit: true // Будущая пара - можно редактировать
+                canEdit: true, // Будущая пара - можно редактировать
+                attendance: null
             }
         },
         "Четверг": {
@@ -54,13 +73,15 @@ const scheduleData = {
                 name: "Алгоритмы",
                 teacher: "Сидорова М.К.",
                 room: "210",
-                canEdit: true // Будущая пара - можно редактировать
+                canEdit: true, // Будущая пара - можно редактировать
+                attendance: null
             },
             "12:00-13:30": {
                 name: "Физкультура",
                 teacher: "Волков А.Н.",
                 room: "Спортзал",
-                canEdit: true // Будущая пара - можно редактировать
+                canEdit: true, // Будущая пара - можно редактировать
+                attendance: null
             }
         },
         "Пятница": {
@@ -68,13 +89,15 @@ const scheduleData = {
                 name: "Проектная деятельность",
                 teacher: "Петров С.В.",
                 room: "415",
-                canEdit: true // Будущая пара - можно редактировать
+                canEdit: true, // Будущая пара - можно редактировать
+                attendance: null
             },
             "14:30-16:00": {
                 name: "Экономика",
                 teacher: "Новикова Л.П.",
                 room: "208",
-                canEdit: true // Будущая пара - можно редактировать
+                canEdit: true, // Будущая пара - можно редактировать
+                attendance: null
             }
         },
         "Суббота": {
@@ -82,45 +105,8 @@ const scheduleData = {
                 name: "Элективная дисциплина",
                 teacher: "Смирнов П.К.",
                 room: "305",
-                canEdit: true // Будущая пара - можно редактировать
-            }
-        }
-    },
-    "25 ноября - 1 декабря 2024": {
-        "Понедельник": {
-            "9:00-10:30": {
-                name: "Математический анализ",
-                teacher: "Иванова А.С.",
-                room: "301",
-                canEdit: true // Будущая неделя - можно редактировать
-            },
-            "13:00-14:30": {
-                name: "Программирование",
-                teacher: "Петров С.В.",
-                room: "415",
-                canEdit: true // Будущая неделя - можно редактировать
-            }
-        },
-        "Вторник": {
-            "10:30-12:00": {
-                name: "Базы данных",
-                teacher: "Сидорова М.К.",
-                room: "210",
-                canEdit: true // Будущая неделя - можно редактировать
-            }
-        },
-        "Среда": {
-            "9:00-10:30": {
-                name: "Физика",
-                teacher: "Козлов Д.И.",
-                room: "305",
-                canEdit: true // Будущая неделя - можно редактировать
-            },
-            "14:30-16:00": {
-                name: "Английский язык",
-                teacher: "Smith J.",
-                room: "104",
-                canEdit: true // Будущая неделя - можно редактировать
+                canEdit: true, // Будущая пара - можно редактировать
+                attendance: null
             }
         }
     }
@@ -147,9 +133,8 @@ const timeSlots = [
     "14:30-16:00"
 ];
 
-// Дни недели (сокращенные)
+// Дни недели
 const daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
-const daysShort = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
 
 class DashboardManager {
     constructor() {
@@ -164,6 +149,7 @@ class DashboardManager {
         this.renderStats();
         this.setupEventListeners();
         this.updateNavigationButtons();
+        this.createViewModal();
     }
 
     getLectureStatus(day, time) {
@@ -225,14 +211,13 @@ class DashboardManager {
         return 'Риск';
     }
 
+    // ОТКРЫТЬ РЕДАКТИРОВАНИЕ ПОСЕЩАЕМОСТИ
     openAttendanceJournal(day, time) {
         const weekSchedule = scheduleData[this.currentWeek];
         const daySchedule = weekSchedule[day];
         const lecture = daySchedule[time];
 
         if (lecture) {
-            const canEdit = this.canEditLecture(day, time);
-
             const lectureData = {
                 day: day,
                 time: time,
@@ -240,7 +225,7 @@ class DashboardManager {
                 teacher: lecture.teacher,
                 room: lecture.room,
                 week: this.currentWeek,
-                canEdit: canEdit
+                canEdit: true
             };
 
             // Передаем данные через URL параметры
@@ -249,6 +234,17 @@ class DashboardManager {
             }).toString();
 
             window.location.href = `attendance.php?${queryString}`;
+        }
+    }
+
+    // ПОКАЗАТЬ МОДАЛЬНОЕ ОКНО ПРОСМОТРА
+    showAttendanceView(day, time) {
+        const weekSchedule = scheduleData[this.currentWeek];
+        const daySchedule = weekSchedule[day];
+        const lecture = daySchedule[time];
+
+        if (lecture && lecture.attendance) {
+            this.showViewModal(lecture, day, time);
         }
     }
 
@@ -272,8 +268,10 @@ class DashboardManager {
                 if (lecture) {
                     const status = this.getLectureStatus(day, time);
                     const canEdit = this.canEditLecture(day, time);
-                    const clickableClass = canEdit ? 'clickable' : 'not-editable';
-                    const editTitle = canEdit ? 'Кликните для отметки посещаемости' : 'Редактирование недоступно для прошедших пар';
+                    const clickableClass = 'clickable';
+                    const editTitle = canEdit ?
+                        'Кликните для отметки посещаемости' :
+                        'Кликните для просмотра посещаемости';
 
                     dayCell.innerHTML = `
                         <div class="lecture-cell ${status} ${clickableClass}"
@@ -286,7 +284,7 @@ class DashboardManager {
                             <div class="lecture-details">
                                 ${lecture.teacher}<br>
                                 <span class="lecture-room">${lecture.room}</span>
-                                ${!canEdit ? '<div class="no-edit-badge">🔒</div>' : ''}
+                                ${!canEdit ? '<div class="no-edit-badge">👁️</div>' : ''}
                             </div>
                         </div>
                     `;
@@ -357,6 +355,7 @@ class DashboardManager {
             this.changeWeek(1);
         });
 
+        // ОБРАБОТКА КЛИКОВ ПО ЯЧЕЙКАМ РАСПИСАНИЯ
         document.addEventListener('click', (e) => {
             const lectureCell = e.target.closest('.lecture-cell.clickable');
             if (lectureCell) {
@@ -365,16 +364,12 @@ class DashboardManager {
                 const canEdit = lectureCell.dataset.editable === 'true';
 
                 if (canEdit) {
+                    // РЕДАКТИРУЕМАЯ ПАРА - открываем страницу attendance
                     this.openAttendanceJournal(day, time);
                 } else {
-                    this.showNotification('Редактирование посещаемости для этой пары недоступно', 'warning');
+                    // ПРОЙДЕННАЯ ПАРА - открываем модальное окно просмотра
+                    this.showAttendanceView(day, time);
                 }
-            }
-
-            // Блокируем клик по нередактируемым ячейкам
-            const notEditableCell = e.target.closest('.lecture-cell.not-editable');
-            if (notEditableCell) {
-                this.showNotification('Редактирование посещаемости для прошедших пар недоступно', 'warning');
             }
         });
 
@@ -385,6 +380,112 @@ class DashboardManager {
         document.getElementById('print-all').addEventListener('click', () => {
             window.print();
         });
+    }
+
+    // СОЗДАНИЕ МОДАЛЬНОГО ОКНА ПРОСМОТРА
+    createViewModal() {
+        if (!document.getElementById('attendance-view-modal')) {
+            const modal = document.createElement('div');
+            modal.id = 'attendance-view-modal';
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="view-modal-title">Посещаемость</h3>
+                        <button class="close-modal" onclick="dashboardManager.hideViewModal()">×</button>
+                    </div>
+                    <div class="modal-body" id="view-modal-body">
+                        <!-- Содержимое будет заполнено через JavaScript -->
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Закрытие по клику вне модального окна
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    this.hideViewModal();
+                }
+            });
+        }
+    }
+
+    // ПОКАЗАТЬ МОДАЛЬНОЕ ОКНО ПРОСМОТРА
+    showViewModal(lecture, day, time) {
+        const modal = document.getElementById('attendance-view-modal');
+        const modalTitle = document.getElementById('view-modal-title');
+        const modalBody = document.getElementById('view-modal-body');
+
+        modalTitle.textContent = `${lecture.name} - ${day}, ${time}`;
+
+        const presentCount = lecture.attendance.present.length;
+        const absentCount = lecture.attendance.absent.length;
+        const totalCount = lecture.attendance.total;
+        const attendancePercent = Math.round((presentCount / totalCount) * 100);
+
+        modalBody.innerHTML = `
+            <div class="lecture-info-grid">
+                <div class="info-item">
+                    <label>👨‍🏫 Преподаватель:</label>
+                    <span>${lecture.teacher}</span>
+                </div>
+                <div class="info-item">
+                    <label>🏫 Аудитория:</label>
+                    <span>${lecture.room}</span>
+                </div>
+                <div class="info-item ${attendancePercent >= 80 ? 'success' : attendancePercent >= 60 ? 'warning' : 'danger'}">
+                    <label>📊 Посещаемость:</label>
+                    <span>${presentCount}/${totalCount} (${attendancePercent}%)</span>
+                </div>
+            </div>
+
+            <div class="attendance-stats">
+                <div class="stat-cards">
+                    <div class="stat-card present">
+                        <div class="stat-value">${presentCount}</div>
+                        <div class="stat-label">Присутствовали</div>
+                    </div>
+                    <div class="stat-card absent">
+                        <div class="stat-value">${absentCount}</div>
+                        <div class="stat-label">Отсутствовали</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="students-lists">
+                <div class="students-section">
+                    <h4>✅ Присутствовали (${presentCount})</h4>
+                    <div class="students-list">
+                        ${lecture.attendance.present.map(student => `
+                            <div class="student-item present">
+                                <span class="student-name">${student}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="students-section">
+                    <h4>❌ Отсутствовали (${absentCount})</h4>
+                    <div class="students-list">
+                        ${lecture.attendance.absent.map(student => `
+                            <div class="student-item absent">
+                                <span class="student-name">${student}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // СКРЫТЬ МОДАЛЬНОЕ ОКНО ПРОСМОТРА
+    hideViewModal() {
+        const modal = document.getElementById('attendance-view-modal');
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
     }
 
     changeWeek(direction) {
@@ -425,17 +526,14 @@ class DashboardManager {
 
     // МЕТОД УВЕДОМЛЕНИЙ
     showNotification(message, type = 'info') {
-        // Создаем уведомление
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
         notification.textContent = message;
 
         document.body.appendChild(notification);
 
-        // Показываем с анимацией
         setTimeout(() => notification.classList.add('show'), 100);
 
-        // Убираем через 3 секунды
         setTimeout(() => {
             notification.classList.remove('show');
             setTimeout(() => notification.remove(), 300);
@@ -444,8 +542,10 @@ class DashboardManager {
 }
 
 // Инициализация при загрузке страницы
+let dashboardManager;
+
 document.addEventListener('DOMContentLoaded', () => {
-    new DashboardManager();
+    dashboardManager = new DashboardManager();
 });
 
 // Функция выхода из системы
@@ -454,3 +554,7 @@ function logout() {
         window.location.href = '../logout.php';
     }
 }
+
+// Добавляем глобальные функции для использования в HTML
+window.dashboardManager = dashboardManager;
+window.logout = logout;

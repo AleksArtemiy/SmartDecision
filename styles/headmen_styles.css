@@ -750,3 +750,238 @@ body {
 .lecture-cell {
     animation: fadeInUp 0.4s ease-out;
 }
+
+/* Модальное окно просмотра посещаемости */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    backdrop-filter: blur(4px);
+}
+
+.modal.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background: var(--white);
+    border-radius: 1rem;
+    padding: 0;
+    max-width: 600px;
+    width: 100%;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--gray-200);
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--white);
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--white);
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.modal-body {
+    padding: 2rem;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* Сетка информации о паре */
+.lecture-info-grid {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--gray-100);
+    border-radius: 0.75rem;
+    border: 1px solid var(--gray-200);
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.info-item label {
+    font-weight: 600;
+    color: var(--gray-700);
+    min-width: 140px;
+}
+
+.info-item.success span {
+    color: var(--success);
+    font-weight: 600;
+}
+
+.info-item.warning span {
+    color: var(--warning);
+    font-weight: 600;
+}
+
+.info-item.danger span {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+/* Статистика посещаемости */
+.attendance-stats {
+    margin-bottom: 2rem;
+}
+
+.stat-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.stat-card.present {
+    background: linear-gradient(135deg, var(--success-light), #e8f5e8);
+    border: 1px solid var(--success-border);
+}
+
+.stat-card.absent {
+    background: linear-gradient(135deg, var(--danger-light), #feebeb);
+    border: 1px solid var(--danger-border);
+}
+
+.stat-card .stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card.present .stat-value {
+    color: var(--success);
+}
+
+.stat-card.absent .stat-value {
+    color: var(--danger);
+}
+
+.stat-card .stat-label {
+    color: var(--gray-600);
+    font-weight: 500;
+}
+
+/* Списки студентов */
+.students-lists {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.students-section h4 {
+    margin: 0 0 1rem 0;
+    color: var(--gray-800);
+    font-weight: 600;
+}
+
+.students-section .students-list {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.students-section .student-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--gray-200);
+}
+
+.students-section .student-item.present {
+    background: var(--success-light);
+    border-color: var(--success-border);
+}
+
+.students-section .student-item.absent {
+    background: var(--danger-light);
+    border-color: var(--danger-border);
+}
+
+.student-name {
+    font-weight: 500;
+}
+
+/* Анимации */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Адаптивность модального окна */
+@media (max-width: 768px) {
+    .modal-content {
+        margin: 1rem;
+        max-height: 90vh;
+    }
+
+    .modal-header {
+        padding: 1.25rem 1.5rem;
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    .stat-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+}

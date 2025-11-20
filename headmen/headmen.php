@@ -132,7 +132,6 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'headman') {
 
 <!-- Контейнер для уведомлений -->
 <div id="notifications-container"></div>
-
 <script src="../js/headmen.js"></script>
 </body>
 </html>
