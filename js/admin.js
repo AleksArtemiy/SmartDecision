@@ -224,3 +224,9 @@ class AdminDashboard {
 document.addEventListener('DOMContentLoaded', () => {
     new AdminDashboard();
 });
+
+function logout() {
+    if (confirm('Вы уверены, что хотите выйти?')) {
+        window.location.href = '../logout.php';
+    }
+}
