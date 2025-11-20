@@ -102,6 +102,23 @@ class TeacherDashboard {
         }).join('');
     }
 
+    updateNavigationButtons() {
+        // Для совместимости со стилями
+    }
+
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => notification.classList.add('show'), 100);
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
     showViewModal(day, time) {
         const weekSchedule = scheduleData[this.currentWeek];
         const daySchedule = weekSchedule[day];
@@ -130,29 +147,39 @@ class TeacherDashboard {
 
             const presentCount = allStudents.filter(s => s.status === 'present').length;
             const totalCount = allStudents.length;
+            const attendancePercent = Math.round((presentCount / totalCount) * 100);
 
             modalBody.innerHTML = `
-                <div style="margin-bottom: 1rem;">
-                    <strong>Аудитория:</strong> ${lecture.room}<br>
-                    <strong>Группы:</strong> ${lecture.groups.join(', ')}<br>
-                    <strong>Посещаемость:</strong> ${presentCount}/${totalCount} студентов
+            <div class="lecture-info-grid" style="margin-bottom: 1.5rem;">
+                <div class="info-item">
+                    <label>🏫 Аудитория:</label>
+                    <span>${lecture.room}</span>
                 </div>
-                <div class="students-edit-list">
-                    ${allStudents.map(student => `
-                        <div class="student-view-item ${student.status}"
-                             data-id="${student.id}"
-                             data-group="${student.group}">
-                            <div>
-                                <strong>${student.name}</strong><br>
-                                <small>${student.group}</small>
-                            </div>
-                            <div>
-                                ${student.status === 'present' ? '✅ Присутствовал' : '❌ Отсутствовал'}
-                            </div>
+                <div class="info-item">
+                    <label>👥 Группы:</label>
+                    <span>${lecture.groups.join(', ')}</span>
+                </div>
+                <div class="info-item ${attendancePercent >= 80 ? 'success' : attendancePercent >= 60 ? 'warning' : 'danger'}">
+                    <label>📊 Посещаемость:</label>
+                    <span>${presentCount}/${totalCount} (${attendancePercent}%)</span>
+                </div>
+            </div>
+            <div class="students-edit-list">
+                ${allStudents.map(student => `
+                    <div class="student-view-item ${student.status}"
+                         data-id="${student.id}"
+                         data-group="${student.group}">
+                        <div>
+                            <strong>${student.name}</strong><br>
+                            <small style="color: var(--gray-600);">${student.group}</small>
                         </div>
-                    `).join('')}
-                </div>
-            `;
+                        <div style="font-weight: 600; color: ${student.status === 'present' ? 'var(--success)' : 'var(--danger)'}">
+                            ${student.status === 'present' ? '✅ Присутствовал' : '❌ Отсутствовал'}
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
 
             modal.classList.add('active');
         }

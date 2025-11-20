@@ -36,6 +36,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'teacher') {
                 </div>
             </div>
 
+            <!-- Легенда -->
             <div class="legend">
                 <div class="legend-item">
                     <div class="legend-color future"></div>
@@ -55,21 +56,24 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'teacher') {
                 </div>
             </div>
 
-            <table class="schedule-table">
-                <thead>
-                <tr>
-                    <th>Время</th>
-                    <th>Пн</th>
-                    <th>Вт</th>
-                    <th>Ср</th>
-                    <th>Чт</th>
-                    <th>Пт</th>
-                    <th>Сб</th>
-                </tr>
-                </thead>
-                <tbody id="schedule-body">
-                </tbody>
-            </table>
+            <!-- КОНТЕЙНЕР ДЛЯ ГОРИЗОНТАЛЬНОЙ ПРОКРУТКИ -->
+            <div class="schedule-container">
+                <table class="schedule-table">
+                    <thead>
+                    <tr>
+                        <th>Время</th>
+                        <th>Пн</th>
+                        <th>Вт</th>
+                        <th>Ср</th>
+                        <th>Чт</th>
+                        <th>Пт</th>
+                        <th>Сб</th>
+                    </tr>
+                    </thead>
+                    <tbody id="schedule-body">
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div class="card">
