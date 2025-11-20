@@ -125,6 +125,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'headman') {
         <button class="btn btn-secondary" onclick="location.reload()">Обновить</button>
     </div>
 </div>
+<div id="notifications-container"></div>
 
 <script src="../js/headmen.js"></script>
 </body>
