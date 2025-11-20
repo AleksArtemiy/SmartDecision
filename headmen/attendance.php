@@ -13,7 +13,6 @@
     <div class="logo">Журнал 2.0</div>
     <div class="user-menu">
         <span>Староста: Петров И.С.</span>
-        <button class="btn btn-secondary">Выйти</button>
     </div>
 </header>
 
