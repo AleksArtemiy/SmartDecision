@@ -57,9 +57,13 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'headman') {
                     <div class="legend-color partial"></div>
                     <span>Частично</span>
                 </div>
+                <div class="legend-item">
+                    <div class="legend-color not-editable"></div>
+                    <span>Редактирование недоступно</span>
+                </div>
             </div>
 
-            <!-- КОНТЕЙНЕР ДЛЯ ГОРИЗОНТАЛЬНОЙ ПРОКРУТКИ -->
+            <!-- Контейнер для горизонтальной прокрутки -->
             <div class="schedule-container">
                 <table class="schedule-table">
                     <thead>
@@ -125,6 +129,8 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'headman') {
         <button class="btn btn-secondary" onclick="location.reload()">Обновить</button>
     </div>
 </div>
+
+<!-- Контейнер для уведомлений -->
 <div id="notifications-container"></div>
 
 <script src="../js/headmen.js"></script>
