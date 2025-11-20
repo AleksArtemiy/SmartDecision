@@ -1,35 +1,62 @@
 <?php
 session_start();
 
-// Демо-аккаунты
-$validAccounts = [
-    'student' => ['username' => 'student', 'password' => '123', 'page' => 'student.php'],
-    'headman' => ['username' => 'headman', 'password' => '123', 'page' => 'index.php'],
-    'teacher' => ['username' => 'teacher', 'password' => '123', 'page' => 'teacher.php'],
-    'admin' => ['username' => 'admin', 'password' => '123', 'page' => 'admin.php']
+// Тестовые данные пользователей
+$users = [
+    'student' => [
+        'password' => '123',
+        'role' => 'student',
+        'redirect' => 'student.php',
+        'name' => 'Иванов А.С. (Студент)'
+    ],
+    'headman' => [
+        'password' => '123',
+        'role' => 'headman',
+        'redirect' => 'headmen.php',
+        'name' => 'Петров И.С. (Староста)'
+    ],
+    'teacher' => [
+        'password' => '123',
+        'role' => 'teacher',
+        'redirect' => 'teacher.php',
+        'name' => 'Иванова А.С. (Преподаватель)'
+    ],
+    'admin' => [
+        'password' => '123',
+        'role' => 'admin',
+        'redirect' => 'admin.php',
+        'name' => 'Деканат (Администратор)'
+    ]
 ];
 
-if ($_POST) {
-    $username = $_POST['username'] ?? '';
-    $password = $_POST['password'] ?? '';
-    $role = $_POST['role'] ?? '';
-    
-    if (isset($validAccounts[$role])) {
-        $account = $validAccounts[$role];
-        
-        if ($username === $account['username'] && $password === $account['password']) {
-            // Успешный вход
-            $_SESSION['user'] = [
-                'username' => $username,
-                'role' => $role
-            ];
-            header('Location: ' . $account['page']);
-            exit;
-        }
-    }
-    
-    // Неудачный вход
-    header('Location: login.php?error=1');
-    exit;
+// Получаем данные из формы
+$username = $_POST['username'] ?? '';
+$password = $_POST['password'] ?? '';
+
+// Проверяем существование пользователя
+if (!array_key_exists($username, $users)) {
+    // Пользователь не найден
+    $_SESSION['error'] = 'Обратитесь в поддержку для добавления';
+    header('Location: index.php');
+    exit();
 }
+
+// Проверяем пароль
+if ($users[$username]['password'] !== $password) {
+    // Неверный пароль
+    $_SESSION['error'] = 'Неверный пароль';
+    header('Location: index.php');
+    exit();
+}
+
+// Успешная авторизация
+$_SESSION['user'] = [
+    'username' => $username,
+    'role' => $users[$username]['role'],
+    'name' => $users[$username]['name']
+];
+
+// Перенаправляем на соответствующую страницу
+header('Location: ' . $users[$username]['redirect']);
+exit();
 ?>

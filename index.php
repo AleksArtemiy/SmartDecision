@@ -1,3 +1,9 @@
+<?php
+session_start();
+// Очищаем ошибку после показа
+$error = $_SESSION['error'] ?? '';
+unset($_SESSION['error']);
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -14,9 +20,11 @@
             <p>Система учета посещаемости</p>
         </div>
 
+        <?php if ($error): ?>
         <div class="error-message" id="error-message">
-            Неверный логин или пароль
+            <?php echo htmlspecialchars($error); ?>
         </div>
+        <?php endif; ?>
 
         <form id="login-form" action="auth.php" method="POST">
             <input type="hidden" id="role" name="role" value="">
