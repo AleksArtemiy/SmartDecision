@@ -51,7 +51,7 @@ $password = $_POST['password'] ?? '';
 // Проверяем существование пользователя
 if (!array_key_exists($username, $users)) {
     // Пользователь не найден
-    $_SESSION['error'] = 'Обратитесь в поддержку для добавления';
+    $_SESSION['error'] = 'Обратитесь в поддержку для добавления в систему';
     header('Location: index.php');
     exit();
 }
