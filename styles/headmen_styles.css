@@ -667,3 +667,86 @@ body {
         font-size: 0.875rem;
     }
 }
+
+/* Стили для заблокированных ячеек */
+.lecture-cell.not-editable {
+    cursor: not-allowed !important;
+    opacity: 0.7;
+    position: relative;
+}
+
+.lecture-cell.not-editable:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.lecture-cell.not-editable::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 0.375rem;
+    pointer-events: none;
+}
+
+.no-edit-badge {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+/* Стили для уведомлений */
+.notification {
+    position: fixed;
+    top: 100px;
+    right: 2rem;
+    background: var(--white);
+    color: var(--gray-800);
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-left: 4px solid var(--primary);
+    transform: translateX(400px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1001;
+    max-width: 300px;
+}
+
+.notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.notification.success {
+    border-left-color: var(--success);
+}
+
+.notification.warning {
+    border-left-color: var(--warning);
+}
+
+.notification.danger {
+    border-left-color: var(--danger);
+}
+
+/* Анимация появления ячеек */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.lecture-cell {
+    animation: fadeInUp 0.4s ease-out;
+}
