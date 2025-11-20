@@ -2,10 +2,11 @@ services:
   - type: web
     name: journal-system
     env: docker
+    plan: free
     docker:
       dockerfile: Dockerfile
     envVars:
       - key: PHP_ENV
         value: production
-    healthCheckPath: /index.php
+    healthCheckPath: /health.php
     autoDeploy: true
