@@ -242,3 +242,10 @@ class DashboardManager {
 document.addEventListener('DOMContentLoaded', () => {
     new DashboardManager();
 });
+
+// Функция выхода из системы
+function logout() {
+    if (confirm('Вы уверены, что хотите выйти?')) {
+        window.location.href = '../logout.php';
+    }
+}

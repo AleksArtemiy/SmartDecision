@@ -329,3 +329,10 @@ class TeacherDashboard {
 document.addEventListener('DOMContentLoaded', () => {
     new TeacherDashboard();
 });
+
+// Функция выхода из системы
+function logout() {
+    if (confirm('Вы уверены, что хотите выйти?')) {
+        window.location.href = '../logout.php';
+    }
+}

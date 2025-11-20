@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'teacher') {
+    header('Location: ../index.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -13,6 +20,7 @@
     <a href="../headmen/index.html" class="logo">Журнал 2.0</a>
     <div class="user-menu">
         <span>Преподаватель: Иванова А.С.</span>
+        <button class="btn btn-secondary" onclick="logout()">Выйти</button>
     </div>
 </header>
 

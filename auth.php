@@ -1,6 +1,21 @@
 <?php
 session_start();
 
+if (isset($_SESSION['user'])) {
+    $role = $_SESSION['user']['role'];
+    $redirects = [
+        'student' => 'student/student.php',
+        'headman' => 'headmen/headmen.php',
+        'teacher' => 'teacher/teacher.php',
+        'admin' => 'admin/admin.php'
+    ];
+
+    if (isset($redirects[$role])) {
+        header('Location: ' . $redirects[$role]);
+        exit();
+    }
+}
+
 // Тестовые данные пользователей
 $users = [
     'student' => [
