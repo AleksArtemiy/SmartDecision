@@ -86,6 +86,24 @@ class DashboardManager {
         return Math.abs(hash);
     }
 
+    // Добавь в класс DashboardManager
+    updateNavigationButtons() {
+        // Для совместимости со стилями
+    }
+
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => notification.classList.add('show'), 100);
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
     isPastLecture(day, time) {
         const dayIndex = daysOfWeek.indexOf(day);
         return dayIndex < 4;

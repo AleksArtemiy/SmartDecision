@@ -1,4 +1,4 @@
-/* Стили для страницы старосты */
+/* Стили для страницы старосты - ОБНОВЛЕННЫЕ */
 body {
     background-color: var(--gray-100);
     color: var(--gray-800);
@@ -6,7 +6,7 @@ body {
     min-height: 100dvh;
 }
 
-/* Шапка */
+/* Шапка - как у студента */
 .header {
     background: var(--white);
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -27,13 +27,11 @@ body {
     font-weight: bold;
     color: var(--primary);
     text-decoration: none;
+    transition: color 0.2s ease;
 }
 
-.nav-menu {
-    display: flex;
-    gap: clamp(0.5rem, 2vw, 1rem);
-    flex-wrap: wrap;
-    justify-content: center;
+.logo:hover {
+    color: var(--primary-dark);
 }
 
 .user-menu {
@@ -41,6 +39,7 @@ body {
     align-items: center;
     gap: clamp(0.5rem, 2vw, 1rem);
     flex-wrap: wrap;
+    font-size: clamp(0.875rem, 2vw, 1rem);
 }
 
 /* Основной контент */
@@ -53,25 +52,39 @@ body {
 
 .card {
     background: var(--white);
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    padding: clamp(1rem, 3vw, 1.5rem);
-    margin-bottom: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: clamp(1.25rem, 4vw, 2rem);
+    margin-bottom: 2rem;
     overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid var(--gray-200);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.card h2 {
+    color: var(--gray-800);
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
 }
 
 /* Двухколоночный layout */
 .dashboard {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: clamp(1rem, 3vw, 1.5rem);
-    margin-bottom: 1.5rem;
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+    margin-bottom: 2rem;
 }
 
 @media (max-width: 1024px) {
     .dashboard {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 1.5rem;
     }
 }
 
@@ -80,47 +93,117 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1.5rem;
+}
+
+.schedule-controls h2 {
+    margin-bottom: 0;
+    color: var(--primary-dark);
 }
 
 .week-navigation {
     display: flex;
     align-items: center;
-    gap: clamp(0.5rem, 2vw, 1rem);
+    gap: clamp(0.75rem, 2vw, 1.5rem);
     flex-wrap: wrap;
 }
 
+.week-navigation .btn {
+    padding: 0.75rem 1.25rem;
+    font-weight: 600;
+    min-width: 80px;
+}
+
 .current-week {
-    font-weight: bold;
-    min-width: min(200px, 100%);
+    font-weight: 700;
+    min-width: min(220px, 100%);
     text-align: center;
     font-size: clamp(1rem, 2.5vw, 1.1rem);
     word-break: break-word;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: 2px solid var(--primary);
 }
 
-/* Таблица расписания */
+/* КОНТЕЙНЕР ДЛЯ ТАБЛИЦЫ РАСПИСАНИЯ - как у студента */
 .schedule-container {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    border-radius: 0.5rem;
+    border: 1px solid var(--gray-200);
+    margin: 1rem 0;
+    background: var(--white);
+    position: relative;
+    width: 100%;
 }
 
+/* Индикатор прокрутки для мобильных */
+.schedule-container::after {
+    content: '← прокрутите →';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(90deg, transparent, var(--primary-light));
+    color: var(--primary);
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 2;
+}
+
+@media (max-width: 768px) {
+    .schedule-container::after {
+        opacity: 1;
+        animation: scrollHint 2s ease-in-out infinite;
+    }
+
+    .schedule-container {
+        border-radius: 0.75rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin: 1rem 0;
+    }
+
+    .schedule-container.scrolled::after {
+        opacity: 0;
+        animation: none;
+    }
+}
+
+@keyframes scrollHint {
+    0%, 100% { transform: translateY(-50%) translateX(0); }
+    50% { transform: translateY(-50%) translateX(-5px); }
+}
+
+/* Таблица расписания - улучшенная */
 .schedule-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 1rem;
+    margin: 0;
     min-width: 800px;
+    background: var(--white);
 }
 
 .schedule-table th {
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: var(--white);
-    padding: clamp(0.75rem, 2vw, 1rem);
+    padding: clamp(1rem, 2vw, 1.25rem);
     text-align: center;
     font-weight: 600;
     border: 1px solid var(--primary-dark);
     white-space: nowrap;
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .schedule-table td {
@@ -128,55 +211,70 @@ body {
     border: 1px solid var(--gray-200);
     text-align: center;
     vertical-align: top;
-    height: clamp(60px, 10vw, 80px);
-    min-width: 120px;
+    height: clamp(70px, 12vw, 90px);
+    min-width: 130px;
+    transition: background-color 0.2s ease;
+    position: relative;
 }
 
+.schedule-table tr:hover td {
+    background-color: var(--gray-50);
+}
+
+/* Колонка времени - фиксированная слева */
 .time-column {
     background: var(--gray-100);
-    font-weight: 500;
-    width: clamp(60px, 8vw, 80px);
+    font-weight: 600;
+    width: clamp(70px, 10vw, 90px);
     white-space: nowrap;
+    color: var(--gray-700);
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    border-right: 2px solid var(--gray-300);
 }
 
 .lecture-cell {
     background: var(--primary-light);
-    border-radius: 0.25rem;
-    padding: 0.375rem;
+    border-radius: 0.375rem;
+    padding: 0.5rem;
     margin: 0.125rem;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     border: 2px solid transparent;
     position: relative;
-    min-height: 50px;
-}
-
-.lecture-cell.attended {
-    background: var(--success-light);
-    border-color: var(--success-border);
-}
-
-.lecture-cell.missed {
-    background: var(--danger-light);
-    border-color: var(--danger-border);
-}
-
-.lecture-cell.partial {
-    background: var(--warning-light);
-    border-color: var(--warning-border);
+    min-height: 60px;
 }
 
 .lecture-cell:hover {
-    transform: scale(1.02);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1;
 }
 
-.lecture-cell.clickable {
-    cursor: pointer;
+.lecture-cell.attended {
+    background: linear-gradient(135deg, var(--success-light), #e8f5e8);
+    border-color: var(--success);
+}
+
+.lecture-cell.missed {
+    background: linear-gradient(135deg, var(--danger-light), #feebeb);
+    border-color: var(--danger);
+}
+
+.lecture-cell.partial {
+    background: linear-gradient(135deg, var(--warning-light), #fef6e6);
+    border-color: var(--warning);
+}
+
+.lecture-cell.future {
+    background: linear-gradient(135deg, var(--primary-light), #dbeafe);
+    border-color: var(--primary);
 }
 
 .lecture-cell.empty {
@@ -191,31 +289,35 @@ body {
 }
 
 .lecture-name {
-    font-weight: 500;
-    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
-    margin-bottom: 0.125rem;
+    font-weight: 600;
+    font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+    margin-bottom: 0.25rem;
     line-height: 1.2;
     word-break: break-word;
+    color: var(--gray-800);
 }
 
 .lecture-details {
-    font-size: clamp(0.65rem, 1.2vw, 0.75rem);
+    font-size: clamp(0.7rem, 1.2vw, 0.8rem);
     color: var(--gray-600);
-    line-height: 1.2;
+    line-height: 1.3;
 }
 
 .lecture-room {
     color: var(--primary-dark);
-    font-weight: 500;
+    font-weight: 600;
+    font-size: clamp(0.75rem, 1.2vw, 0.85rem);
 }
 
 .attendance-status {
     position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 8px;
-    height: 8px;
+    top: 6px;
+    right: 6px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
+    border: 2px solid var(--white);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 .attendance-status.attended {
@@ -230,21 +332,26 @@ body {
     background: var(--warning);
 }
 
-/* Статистика */
+/* Статистика по студентам */
 .stats-overview {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
-    gap: clamp(0.75rem, 2vw, 1rem);
-    margin-bottom: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+    gap: clamp(1rem, 3vw, 1.5rem);
+    margin-bottom: 2rem;
 }
 
 .stat-card {
-    background: var(--white);
-    padding: clamp(1rem, 3vw, 1.5rem);
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, var(--white), var(--gray-100));
+    padding: clamp(1.25rem, 3vw, 1.75rem);
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     text-align: center;
-    border-left: 4px solid var(--primary);
+    border-left: 6px solid var(--primary);
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
 }
 
 .stat-card.good {
@@ -260,53 +367,92 @@ body {
 }
 
 .stat-value {
-    font-size: clamp(1.25rem, 3vw, 2rem);
-    font-weight: bold;
-    margin-bottom: 0.5rem;
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-.stat-value.good { color: var(--success); }
-.stat-value.warning { color: var(--warning); }
-.stat-value.danger { color: var(--danger); }
+.stat-value.good {
+    background: linear-gradient(135deg, var(--success), #059669);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-value.warning {
+    background: linear-gradient(135deg, var(--warning), #d97706);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-value.danger {
+    background: linear-gradient(135deg, var(--danger), #dc2626);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
 .stat-label {
     color: var(--gray-600);
-    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    font-weight: 500;
 }
 
 .progress-bar {
     width: 100%;
-    height: 6px;
+    height: 10px;
     background: var(--gray-200);
-    border-radius: 3px;
+    border-radius: 5px;
     overflow: hidden;
-    margin: 0.5rem 0;
+    margin: 1rem 0 0.5rem 0;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .progress-fill {
     height: 100%;
-    transition: width 0.3s ease;
+    transition: width 0.8s ease;
+    border-radius: 5px;
 }
 
-.progress-fill.good { background: var(--success); }
-.progress-fill.warning { background: var(--warning); }
-.progress-fill.danger { background: var(--danger); }
+.progress-fill.good {
+    background: linear-gradient(90deg, var(--success), #10b981);
+}
+.progress-fill.warning {
+    background: linear-gradient(90deg, var(--warning), #f59e0b);
+}
+.progress-fill.danger {
+    background: linear-gradient(90deg, var(--danger), #ef4444);
+}
 
 /* Список студентов */
 .students-list {
-    max-height: 400px;
+    max-height: 500px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    border-radius: 0.5rem;
+    border: 1px solid var(--gray-200);
 }
 
 .student-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: clamp(0.75rem, 2vw, 1rem);
+    padding: clamp(1rem, 2vw, 1.25rem);
     border-bottom: 1px solid var(--gray-200);
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 1rem;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+}
+
+.student-item:hover {
+    background-color: var(--gray-100);
+}
+
+.student-item:last-child {
+    border-bottom: none;
 }
 
 .student-info {
@@ -317,104 +463,126 @@ body {
 }
 
 .student-name {
-    font-weight: 500;
+    font-weight: 600;
     word-break: break-word;
+    color: var(--gray-800);
+    font-size: clamp(0.95rem, 2vw, 1.05rem);
 }
 
 .student-id {
     color: var(--gray-600);
-    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    margin-top: 0.25rem;
 }
 
 .attendance-badge {
-    padding: 0.25rem 0.75rem;
-    border-radius: 1rem;
-    font-size: 0.75rem;
-    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 1.5rem;
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    font-weight: 600;
     white-space: nowrap;
+    min-width: 80px;
+    text-align: center;
 }
 
 .attendance-badge.good {
     background: var(--success-light);
     color: var(--success);
+    border: 1px solid var(--success-border);
 }
 
 .attendance-badge.warning {
     background: var(--warning-light);
     color: var(--warning);
+    border: 1px solid var(--warning-border);
 }
 
 .attendance-badge.danger {
     background: var(--danger-light);
     color: var(--danger);
+    border: 1px solid var(--danger-border);
 }
 
-/* Легенда */
+/* Легенда - как у студента */
 .legend {
     display: flex;
-    gap: clamp(0.5rem, 2vw, 1rem);
-    margin-bottom: 1rem;
+    gap: clamp(1rem, 3vw, 2rem);
+    margin-bottom: 2rem;
     flex-wrap: wrap;
     justify-content: center;
+    padding: 1.5rem;
+    background: var(--gray-100);
+    border-radius: 0.75rem;
+    border: 1px solid var(--gray-200);
 }
 
 .legend-item {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+    gap: 0.75rem;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    font-weight: 500;
+    color: var(--gray-700);
 }
 
 .legend-color {
-    width: clamp(12px, 3vw, 16px);
-    height: clamp(12px, 3vw, 16px);
+    width: clamp(16px, 4vw, 20px);
+    height: clamp(16px, 4vw, 20px);
     border-radius: 4px;
     flex-shrink: 0;
+    border: 2px solid transparent;
 }
 
 .legend-color.future {
     background: var(--primary-light);
-    border: 1px solid var(--primary);
+    border-color: var(--primary);
 }
 
 .legend-color.attended {
     background: var(--success-light);
-    border: 1px solid var(--success-border);
+    border-color: var(--success);
 }
 
 .legend-color.missed {
     background: var(--danger-light);
-    border: 1px solid var(--danger-border);
+    border-color: var(--danger);
 }
 
 .legend-color.partial {
     background: var(--warning-light);
-    border: 1px solid var(--warning-border);
+    border-color: var(--warning);
 }
 
 /* Группа кнопок */
 .button-group {
     display: flex;
     gap: 1rem;
-    margin-top: 1.5rem;
+    margin-top: 2rem;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
-/* Улучшенная адаптивность */
-@media (max-width: 1024px) {
-    .container {
-        overflow-x: hidden;
+/* Анимации */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
     }
-
-    .schedule-table {
-        min-width: 700px;
-    }
-
-    .stats-overview {
-        grid-template-columns: repeat(2, 1fr);
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
+.card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.stat-card {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* Мобильные стили */
 @media (max-width: 768px) {
     .header {
         padding: 1rem;
@@ -423,21 +591,33 @@ body {
         position: relative;
     }
 
-    .nav-menu {
-        order: 3;
-        width: 100%;
-        justify-content: center;
-    }
-
     .schedule-controls {
         flex-direction: column;
-        gap: 1rem;
+        gap: 1.5rem;
         align-items: stretch;
+        text-align: center;
     }
 
     .week-navigation {
         width: 100%;
         justify-content: space-between;
+    }
+
+    .current-week {
+        order: -1;
+        width: 100%;
+    }
+
+    .user-menu {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .legend {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
     }
 
     .stats-overview {
@@ -460,21 +640,17 @@ body {
     .button-group .btn {
         width: 100%;
     }
-
-    .user-menu {
-        justify-content: center;
-        width: 100%;
-    }
 }
 
 @media (max-width: 480px) {
     .container {
-        padding: 0 0.25rem;
+        padding: 0 0.5rem;
     }
 
     .card {
-        padding: 1rem;
-        margin-bottom: 1rem;
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+        border-radius: 0.5rem;
     }
 
     .schedule-table td {
@@ -486,49 +662,8 @@ body {
         padding: 0.25rem;
     }
 
-    .nav-menu {
-        flex-direction: column;
-        align-items: center;
+    .week-navigation .btn {
+        padding: 0.625rem 1rem;
+        font-size: 0.875rem;
     }
-
-    .nav-menu .btn {
-        width: 100%;
-        text-align: center;
-    }
-
-    .legend {
-        justify-content: flex-start;
-    }
-}
-
-/* Поддержка пейзажной ориентации */
-@media (max-width: 768px) and (orientation: landscape) {
-    .dashboard {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .students-list {
-        max-height: 200px;
-    }
-
-    .stats-overview {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Улучшения для навигации */
-.nav-menu .btn {
-    white-space: nowrap;
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Фокус-состояния для доступности */
-.btn:focus,
-.lecture-cell:focus,
-.student-edit-item:focus {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
 }
