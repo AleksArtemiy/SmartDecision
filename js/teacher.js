@@ -185,6 +185,7 @@ class TeacherDashboard {
         }
     }
 
+
     showEditModal() {
         if (!this.currentLecture) return;
 
