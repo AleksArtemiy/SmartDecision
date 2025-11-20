@@ -18,6 +18,8 @@ body {
     position: sticky;
     top: 0;
     z-index: 100;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .logo {
@@ -25,6 +27,11 @@ body {
     font-weight: bold;
     color: var(--primary);
     text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.logo:hover {
+    color: var(--primary-dark);
 }
 
 .user-menu {
@@ -32,6 +39,12 @@ body {
     align-items: center;
     gap: clamp(0.5rem, 2vw, 1rem);
     flex-wrap: wrap;
+    font-size: clamp(0.875rem, 2vw, 1rem);
+}
+
+.user-info {
+    color: var(--gray-600);
+    font-weight: 500;
 }
 
 /* Основной контент */
@@ -44,25 +57,39 @@ body {
 
 .card {
     background: var(--white);
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    padding: clamp(1rem, 3vw, 1.5rem);
-    margin-bottom: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: clamp(1.25rem, 4vw, 2rem);
+    margin-bottom: 2rem;
     overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid var(--gray-200);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.card h2 {
+    color: var(--gray-800);
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
 }
 
 /* Двухколоночный layout */
 .dashboard {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: clamp(1rem, 3vw, 1.5rem);
-    margin-bottom: 1.5rem;
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+    margin-bottom: 2rem;
 }
 
 @media (max-width: 1024px) {
     .dashboard {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 1.5rem;
     }
 }
 
@@ -71,47 +98,69 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1.5rem;
+}
+
+.schedule-controls h2 {
+    margin-bottom: 0;
+    color: var(--primary-dark);
 }
 
 .week-navigation {
     display: flex;
     align-items: center;
-    gap: clamp(0.5rem, 2vw, 1rem);
+    gap: clamp(0.75rem, 2vw, 1.5rem);
     flex-wrap: wrap;
 }
 
+.week-navigation .btn {
+    padding: 0.75rem 1.25rem;
+    font-weight: 600;
+    min-width: 80px;
+}
+
 .current-week {
-    font-weight: bold;
-    min-width: min(200px, 100%);
+    font-weight: 700;
+    min-width: min(220px, 100%);
     text-align: center;
     font-size: clamp(1rem, 2.5vw, 1.1rem);
     word-break: break-word;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: 2px solid var(--primary);
 }
 
 /* Таблица расписания */
 .schedule-container {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    border-radius: 0.5rem;
+    border: 1px solid var(--gray-200);
 }
 
 .schedule-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 1rem;
+    margin: 0;
     min-width: 800px;
+    background: var(--white);
 }
 
 .schedule-table th {
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: var(--white);
-    padding: clamp(0.75rem, 2vw, 1rem);
+    padding: clamp(1rem, 2vw, 1.25rem);
     text-align: center;
     font-weight: 600;
     border: 1px solid var(--primary-dark);
     white-space: nowrap;
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
+    position: sticky;
+    top: 0;
 }
 
 .schedule-table td {
@@ -119,51 +168,59 @@ body {
     border: 1px solid var(--gray-200);
     text-align: center;
     vertical-align: top;
-    height: clamp(60px, 10vw, 80px);
-    min-width: 120px;
+    height: clamp(70px, 12vw, 90px);
+    min-width: 130px;
+    transition: background-color 0.2s ease;
+}
+
+.schedule-table tr:hover td {
+    background-color: var(--gray-50);
 }
 
 .time-column {
     background: var(--gray-100);
-    font-weight: 500;
-    width: clamp(60px, 8vw, 80px);
+    font-weight: 600;
+    width: clamp(70px, 10vw, 90px);
     white-space: nowrap;
+    color: var(--gray-700);
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
 }
 
 .lecture-cell {
     background: var(--primary-light);
-    border-radius: 0.25rem;
-    padding: 0.375rem;
+    border-radius: 0.375rem;
+    padding: 0.5rem;
     margin: 0.125rem;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     border: 2px solid transparent;
     position: relative;
-    min-height: 50px;
-}
-
-.lecture-cell.attended {
-    background: var(--success-light);
-    border-color: var(--success-border);
-}
-
-.lecture-cell.missed {
-    background: var(--danger-light);
-    border-color: var(--danger-border);
-}
-
-.lecture-cell.cancelled {
-    background: var(--warning-light);
-    border-color: var(--warning-border);
+    min-height: 60px;
 }
 
 .lecture-cell:hover {
-    transform: scale(1.02);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1;
+}
+
+.lecture-cell.attended {
+    background: linear-gradient(135deg, var(--success-light), #e8f5e8);
+    border-color: var(--success);
+}
+
+.lecture-cell.missed {
+    background: linear-gradient(135deg, var(--danger-light), #feebeb);
+    border-color: var(--danger);
+}
+
+.lecture-cell.cancelled {
+    background: linear-gradient(135deg, var(--warning-light), #fef6e6);
+    border-color: var(--warning);
 }
 
 .lecture-cell.empty {
@@ -178,31 +235,35 @@ body {
 }
 
 .lecture-name {
-    font-weight: 500;
-    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
-    margin-bottom: 0.125rem;
+    font-weight: 600;
+    font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+    margin-bottom: 0.25rem;
     line-height: 1.2;
     word-break: break-word;
+    color: var(--gray-800);
 }
 
 .lecture-details {
-    font-size: clamp(0.65rem, 1.2vw, 0.75rem);
+    font-size: clamp(0.7rem, 1.2vw, 0.8rem);
     color: var(--gray-600);
-    line-height: 1.2;
+    line-height: 1.3;
 }
 
 .lecture-room {
     color: var(--primary-dark);
-    font-weight: 500;
+    font-weight: 600;
+    font-size: clamp(0.75rem, 1.2vw, 0.85rem);
 }
 
 .attendance-status {
     position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 8px;
-    height: 8px;
+    top: 6px;
+    right: 6px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
+    border: 2px solid var(--white);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 .attendance-status.attended {
@@ -221,17 +282,22 @@ body {
 .stats-overview {
     display: grid;
     grid-template-columns: 1fr;
-    gap: clamp(0.75rem, 2vw, 1rem);
-    margin-bottom: 1.5rem;
+    gap: clamp(1rem, 3vw, 1.5rem);
+    margin-bottom: 2rem;
 }
 
 .stat-card {
-    background: var(--white);
-    padding: clamp(1rem, 3vw, 1.5rem);
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, var(--white), var(--gray-100));
+    padding: clamp(1.25rem, 3vw, 1.75rem);
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     text-align: center;
-    border-left: 4px solid var(--primary);
+    border-left: 6px solid var(--primary);
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
 }
 
 .stat-card.good {
@@ -247,53 +313,107 @@ body {
 }
 
 .stat-value {
-    font-size: clamp(1.5rem, 4vw, 2rem);
-    font-weight: bold;
-    margin-bottom: 0.5rem;
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-.stat-value.good { color: var(--success); }
-.stat-value.warning { color: var(--warning); }
-.stat-value.danger { color: var(--danger); }
+.stat-value.good {
+    background: linear-gradient(135deg, var(--success), #059669);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-value.warning {
+    background: linear-gradient(135deg, var(--warning), #d97706);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-value.danger {
+    background: linear-gradient(135deg, var(--danger), #dc2626);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
 .stat-label {
     color: var(--gray-600);
-    font-size: clamp(0.8rem, 2vw, 0.9rem);
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    font-weight: 500;
 }
 
 .progress-bar {
     width: 100%;
-    height: 8px;
+    height: 10px;
     background: var(--gray-200);
-    border-radius: 4px;
+    border-radius: 5px;
     overflow: hidden;
-    margin: 0.5rem 0;
+    margin: 1rem 0 0.5rem 0;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .progress-fill {
     height: 100%;
-    transition: width 0.3s ease;
+    transition: width 0.8s ease;
+    border-radius: 5px;
 }
 
-.progress-fill.good { background: var(--success); }
-.progress-fill.warning { background: var(--warning); }
-.progress-fill.danger { background: var(--danger); }
+.progress-fill.good {
+    background: linear-gradient(90deg, var(--success), #10b981);
+}
+.progress-fill.warning {
+    background: linear-gradient(90deg, var(--warning), #f59e0b);
+}
+.progress-fill.danger {
+    background: linear-gradient(90deg, var(--danger), #ef4444);
+}
 
 /* Список предметов */
+.subjects-stats-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2rem 0 1rem 0;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.subjects-stats-header h3 {
+    margin: 0;
+    color: var(--gray-800);
+    font-size: clamp(1.1rem, 2.5vw, 1.25rem);
+}
+
 .subjects-list {
-    max-height: 400px;
+    max-height: 500px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    border-radius: 0.5rem;
+    border: 1px solid var(--gray-200);
 }
 
 .subject-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: clamp(0.75rem, 2vw, 1rem);
+    padding: clamp(1rem, 2vw, 1.25rem);
     border-bottom: 1px solid var(--gray-200);
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 1rem;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+}
+
+.subject-item:hover {
+    background-color: var(--gray-100);
+}
+
+.subject-item:last-child {
+    border-bottom: none;
 }
 
 .subject-info {
@@ -304,87 +424,114 @@ body {
 }
 
 .subject-name {
-    font-weight: 500;
+    font-weight: 600;
     word-break: break-word;
+    color: var(--gray-800);
+    font-size: clamp(0.95rem, 2vw, 1.05rem);
 }
 
 .subject-teacher {
     color: var(--gray-600);
-    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    margin-top: 0.25rem;
 }
 
 .attendance-badge {
-    padding: 0.25rem 0.75rem;
-    border-radius: 1rem;
-    font-size: 0.75rem;
-    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 1.5rem;
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    font-weight: 600;
     white-space: nowrap;
+    min-width: 80px;
+    text-align: center;
 }
 
 .attendance-badge.good {
     background: var(--success-light);
     color: var(--success);
+    border: 1px solid var(--success-border);
 }
 
 .attendance-badge.warning {
     background: var(--warning-light);
     color: var(--warning);
+    border: 1px solid var(--warning-border);
 }
 
 .attendance-badge.danger {
     background: var(--danger-light);
     color: var(--danger);
+    border: 1px solid var(--danger-border);
 }
 
 /* Легенда */
 .legend {
     display: flex;
-    gap: clamp(0.5rem, 2vw, 1rem);
-    margin-bottom: 1rem;
+    gap: clamp(1rem, 3vw, 2rem);
+    margin-bottom: 2rem;
     flex-wrap: wrap;
     justify-content: center;
+    padding: 1.5rem;
+    background: var(--gray-100);
+    border-radius: 0.75rem;
+    border: 1px solid var(--gray-200);
 }
 
 .legend-item {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+    gap: 0.75rem;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    font-weight: 500;
+    color: var(--gray-700);
 }
 
 .legend-color {
-    width: clamp(12px, 3vw, 16px);
-    height: clamp(12px, 3vw, 16px);
+    width: clamp(16px, 4vw, 20px);
+    height: clamp(16px, 4vw, 20px);
     border-radius: 4px;
     flex-shrink: 0;
+    border: 2px solid transparent;
 }
 
 .legend-color.future {
     background: var(--primary-light);
-    border: 1px solid var(--primary);
+    border-color: var(--primary);
 }
 
 .legend-color.attended {
     background: var(--success-light);
-    border: 1px solid var(--success-border);
+    border-color: var(--success);
 }
 
 .legend-color.missed {
     background: var(--danger-light);
-    border: 1px solid var(--danger-border);
+    border-color: var(--danger);
 }
 
 .legend-color.cancelled {
     background: var(--warning-light);
-    border: 1px solid var(--warning-border);
+    border-color: var(--warning);
 }
 
-/* Группа кнопок */
-.button-group {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    flex-wrap: wrap;
+/* Анимации */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.stat-card {
+    animation: fadeInUp 0.8s ease-out;
 }
 
 /* Улучшенная адаптивность */
@@ -394,12 +541,13 @@ body {
     }
 
     .schedule-table {
-        min-width: 700px;
+        min-width: 750px;
     }
 
     .subject-item {
         flex-direction: column;
         align-items: flex-start;
+        text-align: left;
     }
 
     .attendance-badge {
@@ -417,8 +565,9 @@ body {
 
     .schedule-controls {
         flex-direction: column;
-        gap: 1rem;
+        gap: 1.5rem;
         align-items: stretch;
+        text-align: center;
     }
 
     .week-navigation {
@@ -427,56 +576,381 @@ body {
     }
 
     .current-week {
-        min-width: auto;
-        flex: 1;
-        text-align: center;
-    }
-
-    .button-group {
-        flex-direction: column;
-    }
-
-    .button-group .btn {
+        order: -1;
         width: 100%;
     }
 
     .user-menu {
-        justify-content: center;
-        width: 100%;
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .legend {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
     }
 }
 
 @media (max-width: 480px) {
     .container {
-        padding: 0 0.25rem;
+        padding: 0 0.5rem;
     }
 
     .card {
-        padding: 1rem;
-        margin-bottom: 1rem;
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+        border-radius: 0.5rem;
     }
 
     .schedule-table td {
-        padding: 0.25rem;
-        min-width: 100px;
+        padding: 0.375rem;
+        min-width: 110px;
     }
 
     .lecture-cell {
-        padding: 0.25rem;
+        padding: 0.375rem;
     }
 
-    .legend {
-        justify-content: flex-start;
+    .week-navigation .btn {
+        padding: 0.625rem 1rem;
+        font-size: 0.875rem;
     }
 }
 
-/* Поддержка landscape на мобильных */
-@media (max-width: 768px) and (orientation: landscape) {
-    .dashboard {
-        grid-template-columns: 1fr 1fr;
+/* Темная тема поддержка */
+@media (prefers-color-scheme: dark) {
+    .card {
+        background: var(--gray-800);
+        border-color: var(--gray-600);
     }
 
-    .subjects-list {
-        max-height: 200px;
+    .schedule-table td {
+        background: var(--gray-800);
+        border-color: var(--gray-600);
+    }
+
+    .time-column {
+        background: var(--gray-700);
+        color: var(--gray-300);
+    }
+}
+
+/* Модальные окна */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    backdrop-filter: blur(4px);
+}
+
+.modal.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background: var(--white);
+    border-radius: 1rem;
+    padding: 0;
+    max-width: 500px;
+    width: 100%;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--gray-200);
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--white);
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--white);
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.modal-body {
+    padding: 2rem;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* Сетка информации о паре */
+.lecture-info-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-item label {
+    font-weight: 600;
+    color: var(--gray-700);
+    min-width: 140px;
+}
+
+.info-item.status.success span {
+    color: var(--success);
+    font-weight: 600;
+}
+
+.info-item.status.danger span {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+.info-item.status.warning span {
+    color: var(--warning);
+    font-weight: 600;
+}
+
+.info-item.status.info span {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.missed-warning {
+    background: var(--danger-light);
+    border: 1px solid var(--danger-border);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    color: var(--danger);
+}
+
+/* Детали предмета */
+.subject-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.detail-item label {
+    font-weight: 600;
+    color: var(--gray-700);
+}
+
+.attendance-value {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.attendance-value.good { color: var(--success); }
+.attendance-value.warning { color: var(--warning); }
+.attendance-value.danger { color: var(--danger); }
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.stat-box {
+    text-align: center;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background: var(--gray-100);
+}
+
+.stat-box.attended {
+    background: var(--success-light);
+    border: 1px solid var(--success-border);
+}
+
+.stat-box.missed {
+    background: var(--danger-light);
+    border: 1px solid var(--danger-border);
+}
+
+.stat-box.total {
+    background: var(--primary-light);
+    border: 1px solid var(--primary);
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.stat-box.attended .stat-number { color: var(--success); }
+.stat-box.missed .stat-number { color: var(--danger); }
+.stat-box.total .stat-number { color: var(--primary); }
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    font-weight: 500;
+}
+
+.progress-container {
+    margin-top: 1rem;
+}
+
+.progress-bar.large {
+    height: 12px;
+    border-radius: 6px;
+}
+
+.progress-text {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-weight: 600;
+    color: var(--gray-700);
+}
+
+/* Уведомления */
+.notification {
+    position: fixed;
+    top: 100px;
+    right: 2rem;
+    background: var(--white);
+    color: var(--gray-800);
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-left: 4px solid var(--primary);
+    transform: translateX(400px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1001;
+    max-width: 300px;
+}
+
+.notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.notification.success {
+    border-left-color: var(--success);
+}
+
+.notification.warning {
+    border-left-color: var(--warning);
+}
+
+.notification.danger {
+    border-left-color: var(--danger);
+}
+
+/* Иконки в расписании */
+.type-icon {
+    margin-right: 0.25rem;
+    font-size: 0.9em;
+}
+
+.status-indicator {
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+}
+
+/* Анимации */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Дополнительные стили для статистики */
+.subject-stats {
+    font-size: 0.8rem;
+    color: var(--gray-600);
+    margin-top: 0.25rem;
+}
+
+/* Адаптивность модальных окон */
+@media (max-width: 768px) {
+    .modal-content {
+        margin: 1rem;
+        max-height: 90vh;
+    }
+
+    .modal-header {
+        padding: 1.25rem 1.5rem;
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .notification {
+        right: 1rem;
+        left: 1rem;
+        max-width: none;
     }
 }
