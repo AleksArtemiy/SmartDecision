@@ -20,7 +20,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
     <a href="../headmen/index.php" class="logo">Журнал 2.0 - Админпанель</a>
     <div class="user-menu">
         <span>Администратор: Деканат</span>
-        <button class="btn btn-secondary">Выйти</button>
+        <button class="btn btn-secondary" onclick="logout()">Выйти</button>
     </div>
 </header>
 
