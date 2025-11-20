@@ -119,7 +119,7 @@ class DashboardManager {
             };
 
             localStorage.setItem('currentLecture', JSON.stringify(lectureData));
-            window.location.href = 'attendance.html';
+            window.location.href = 'attendance.php';
         }
     }
 
