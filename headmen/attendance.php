@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Журнал посещаемости 2.0</title>
     <link rel="stylesheet" href="../styles/style.css">
-    <link rel="stylesheet" href="../styles/attendance.css">
+    <link rel="stylesheet" href="../styles/attendance_styles.css">
 </head>
 <body>
 <!-- Шапка -->
