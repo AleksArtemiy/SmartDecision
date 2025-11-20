@@ -1,22 +1,25 @@
 /* Стили для страницы журнала посещаемости */
-
 body {
     background-color: var(--gray-100);
     color: var(--gray-800);
+    min-height: 100vh;
+    min-height: 100dvh;
 }
 
 /* Шапка */
 .header {
     background: var(--white);
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 1rem 2rem;
+    padding: 1rem clamp(1rem, 3vw, 2rem);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .logo {
-    font-size: 1.5rem;
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
     font-weight: bold;
     color: var(--primary);
 }
@@ -24,37 +27,47 @@ body {
 .user-menu {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: clamp(0.5rem, 2vw, 1rem);
+    flex-wrap: wrap;
 }
 
 /* Основной контент */
 .container {
     max-width: 1200px;
     margin: 2rem auto;
-    padding: 0 1rem;
+    padding: 0 clamp(0.5rem, 2vw, 1rem);
+    width: 100%;
 }
 
 .card {
     background: var(--white);
     border-radius: 0.5rem;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    padding: 1.5rem;
+    padding: clamp(1rem, 3vw, 1.5rem);
     margin-bottom: 1.5rem;
+    overflow: hidden;
 }
 
 /* Информация о паре */
 .lecture-info {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: var(--white);
-    padding: 1.5rem;
+    padding: clamp(1rem, 3vw, 1.5rem);
     border-radius: 0.5rem;
     margin-bottom: 1.5rem;
+    word-break: break-word;
 }
 
 .lecture-title {
-    font-size: 1.5rem;
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
     font-weight: bold;
     margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.lecture-details {
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    opacity: 0.9;
 }
 
 /* Кнопка назад */
@@ -63,18 +76,21 @@ body {
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 1rem;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
     background: var(--gray-200);
     color: var(--gray-800);
     text-decoration: none;
     border-radius: 0.375rem;
     transition: all 0.2s;
     font-weight: 500;
+    min-height: 44px;
 }
 
-.back-button:hover {
+.back-button:hover,
+.back-button:focus {
     background: var(--gray-300);
     transform: translateX(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 /* Список студентов */
@@ -87,13 +103,16 @@ body {
 .student-item {
     display: flex;
     align-items: center;
-    padding: 1rem;
+    padding: clamp(0.75rem, 2vw, 1rem);
     border: 2px solid var(--gray-200);
     border-radius: 0.5rem;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
     background: var(--white);
     cursor: pointer;
     position: relative;
+    min-height: 60px;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .student-item::before {
@@ -126,33 +145,43 @@ body {
     background: var(--danger);
 }
 
-.student-item:hover {
+.student-item:hover,
+.student-item:focus {
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    outline: none;
 }
 
 .student-info {
     flex: 1;
     display: flex;
-    gap: 1rem;
+    gap: clamp(0.5rem, 2vw, 1rem);
     align-items: center;
+    flex-wrap: wrap;
+    min-width: min(200px, 100%);
 }
 
 .student-name {
     font-weight: 500;
+    word-break: break-word;
 }
 
 .student-id {
     color: var(--gray-600);
-    font-size: 0.875rem;
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
 }
 
 .status-badge {
-    padding: 0.25rem 0.75rem;
+    padding: 0.5rem 1rem;
     border-radius: 1rem;
     font-size: 0.75rem;
     font-weight: 500;
     margin-left: auto;
+    white-space: nowrap;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .status-badge.present {
@@ -177,19 +206,31 @@ body {
     margin-top: 1.5rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--gray-200);
+    flex-wrap: wrap;
+}
+
+.quick-actions .btn {
+    flex: 1;
+    min-width: min(150px, 100%);
 }
 
 /* Поиск */
 .search-box {
     margin-bottom: 1.5rem;
+    position: relative;
 }
 
 .search-input {
     width: 100%;
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
     border: 1px solid var(--gray-200);
     border-radius: 0.375rem;
     font-size: 1rem;
+    min-height: 44px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 0.75rem center;
+    background-size: 1rem;
 }
 
 .search-input:focus {
@@ -201,21 +242,26 @@ body {
 /* Статистика в реальном времени */
 .stats-bar {
     display: flex;
-    gap: 2rem;
+    gap: clamp(1rem, 3vw, 2rem);
     margin-bottom: 1.5rem;
     padding: 1rem;
     background: var(--white);
     border-radius: 0.5rem;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .stat-item {
     text-align: center;
+    flex: 1;
+    min-width: min(120px, 100%);
 }
 
 .stat-value {
-    font-size: 1.5rem;
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
     font-weight: bold;
+    display: block;
 }
 
 .stat-value.present {
@@ -226,7 +272,14 @@ body {
     color: var(--danger);
 }
 
-/* Адаптивность */
+.stat-label {
+    color: var(--gray-600);
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+    display: block;
+    margin-top: 0.25rem;
+}
+
+/* Улучшенная адаптивность */
 @media (max-width: 768px) {
     .container {
         margin: 1rem auto;
@@ -235,20 +288,121 @@ body {
 
     .header {
         padding: 1rem;
+        flex-direction: column;
+        text-align: center;
     }
 
     .student-info {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.25rem;
+        width: 100%;
     }
 
     .stats-bar {
         flex-direction: column;
         gap: 1rem;
+        text-align: center;
+    }
+
+    .stat-item {
+        min-width: auto;
     }
 
     .quick-actions {
         flex-direction: column;
     }
+
+    .quick-actions .btn {
+        width: 100%;
+    }
+
+    .status-badge {
+        margin-left: 0;
+        align-self: flex-start;
+    }
+
+    .user-menu {
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 0.25rem;
+    }
+
+    .card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .lecture-info {
+        padding: 1rem;
+    }
+
+    .student-item {
+        padding: 0.75rem;
+    }
+
+    .back-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 360px) {
+    .student-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .status-badge {
+        align-self: stretch;
+        text-align: center;
+    }
+}
+
+/* Анимации для лучшего UX */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.student-item {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.student-item:nth-child(even) {
+    animation-delay: 0.05s;
+}
+
+.student-item:nth-child(odd) {
+    animation-delay: 0.1s;
+}
+
+/* Поддержка темной темы */
+@media (prefers-color-scheme: dark) {
+    .student-item:not(.present):not(.absent) {
+        background: var(--gray-800);
+        border-color: var(--gray-600);
+        color: var(--white);
+    }
+
+    .student-id {
+        color: var(--gray-400);
+    }
+}
+
+/* Улучшения для скринридеров */
+.student-item[role="button"]:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
 }

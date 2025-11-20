@@ -1,23 +1,29 @@
 /* Стили для страницы старосты */
-
 body {
     background-color: var(--gray-100);
     color: var(--gray-800);
+    min-height: 100vh;
+    min-height: 100dvh;
 }
 
 /* Шапка */
 .header {
     background: var(--white);
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 1rem 2rem;
+    padding: 1rem clamp(1rem, 3vw, 2rem);
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .logo {
-    font-size: 1.5rem;
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
     font-weight: bold;
     color: var(--primary);
     text-decoration: none;
@@ -25,41 +31,47 @@ body {
 
 .nav-menu {
     display: flex;
-    gap: 1rem;
+    gap: clamp(0.5rem, 2vw, 1rem);
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .user-menu {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: clamp(0.5rem, 2vw, 1rem);
+    flex-wrap: wrap;
 }
 
 /* Основной контент */
 .container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 clamp(0.5rem, 2vw, 1rem);
+    width: 100%;
 }
 
 .card {
     background: var(--white);
     border-radius: 0.5rem;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    padding: 1.5rem;
+    padding: clamp(1rem, 3vw, 1.5rem);
     margin-bottom: 1.5rem;
+    overflow: hidden;
 }
 
 /* Двухколоночный layout */
 .dashboard {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: 1.5rem;
+    gap: clamp(1rem, 3vw, 1.5rem);
     margin-bottom: 1.5rem;
 }
 
 @media (max-width: 1024px) {
     .dashboard {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
 }
 
@@ -69,64 +81,78 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .week-navigation {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: clamp(0.5rem, 2vw, 1rem);
+    flex-wrap: wrap;
 }
 
 .current-week {
     font-weight: bold;
-    min-width: 200px;
+    min-width: min(200px, 100%);
     text-align: center;
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 2.5vw, 1.1rem);
+    word-break: break-word;
 }
 
 /* Таблица расписания */
+.schedule-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
 .schedule-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 1rem;
+    min-width: 800px;
 }
 
 .schedule-table th {
     background: var(--primary);
     color: var(--white);
-    padding: 1rem;
+    padding: clamp(0.75rem, 2vw, 1rem);
     text-align: center;
     font-weight: 600;
     border: 1px solid var(--primary-dark);
+    white-space: nowrap;
 }
 
 .schedule-table td {
-    padding: 0.75rem;
+    padding: 0.5rem;
     border: 1px solid var(--gray-200);
     text-align: center;
     vertical-align: top;
-    height: 80px;
+    height: clamp(60px, 10vw, 80px);
+    min-width: 120px;
 }
 
 .time-column {
     background: var(--gray-100);
     font-weight: 500;
-    width: 80px;
+    width: clamp(60px, 8vw, 80px);
+    white-space: nowrap;
 }
 
 .lecture-cell {
     background: var(--primary-light);
     border-radius: 0.25rem;
-    padding: 0.5rem;
+    padding: 0.375rem;
     margin: 0.125rem;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     border: 2px solid transparent;
     position: relative;
+    min-height: 50px;
 }
 
 .lecture-cell.attended {
@@ -161,17 +187,21 @@ body {
 .lecture-cell.empty:hover {
     transform: none;
     background: transparent;
+    box-shadow: none;
 }
 
 .lecture-name {
     font-weight: 500;
-    font-size: 0.9rem;
-    margin-bottom: 0.25rem;
+    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+    margin-bottom: 0.125rem;
+    line-height: 1.2;
+    word-break: break-word;
 }
 
 .lecture-details {
-    font-size: 0.75rem;
+    font-size: clamp(0.65rem, 1.2vw, 0.75rem);
     color: var(--gray-600);
+    line-height: 1.2;
 }
 
 .lecture-room {
@@ -203,14 +233,14 @@ body {
 /* Статистика */
 .stats-overview {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+    gap: clamp(0.75rem, 2vw, 1rem);
     margin-bottom: 1.5rem;
 }
 
 .stat-card {
     background: var(--white);
-    padding: 1.5rem;
+    padding: clamp(1rem, 3vw, 1.5rem);
     border-radius: 0.5rem;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     text-align: center;
@@ -230,7 +260,7 @@ body {
 }
 
 .stat-value {
-    font-size: 2rem;
+    font-size: clamp(1.25rem, 3vw, 2rem);
     font-weight: bold;
     margin-bottom: 0.5rem;
 }
@@ -241,14 +271,14 @@ body {
 
 .stat-label {
     color: var(--gray-600);
-    font-size: 0.9rem;
+    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
 }
 
 .progress-bar {
     width: 100%;
-    height: 8px;
+    height: 6px;
     background: var(--gray-200);
-    border-radius: 4px;
+    border-radius: 3px;
     overflow: hidden;
     margin: 0.5rem 0;
 }
@@ -266,28 +296,34 @@ body {
 .students-list {
     max-height: 400px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .student-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
+    padding: clamp(0.75rem, 2vw, 1rem);
     border-bottom: 1px solid var(--gray-200);
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .student-info {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    min-width: min(200px, 100%);
 }
 
 .student-name {
     font-weight: 500;
+    word-break: break-word;
 }
 
 .student-id {
     color: var(--gray-600);
-    font-size: 0.875rem;
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
 }
 
 .attendance-badge {
@@ -295,6 +331,7 @@ body {
     border-radius: 1rem;
     font-size: 0.75rem;
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .attendance-badge.good {
@@ -315,22 +352,24 @@ body {
 /* Легенда */
 .legend {
     display: flex;
-    gap: 1rem;
+    gap: clamp(0.5rem, 2vw, 1rem);
     margin-bottom: 1rem;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .legend-item {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.875rem;
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
 }
 
 .legend-color {
-    width: 16px;
-    height: 16px;
+    width: clamp(12px, 3vw, 16px);
+    height: clamp(12px, 3vw, 16px);
     border-radius: 4px;
+    flex-shrink: 0;
 }
 
 .legend-color.future {
@@ -358,16 +397,21 @@ body {
     display: flex;
     gap: 1rem;
     margin-top: 1.5rem;
+    flex-wrap: wrap;
 }
 
-/* Адаптивность */
+/* Улучшенная адаптивность */
 @media (max-width: 1024px) {
     .container {
-        overflow-x: auto;
+        overflow-x: hidden;
     }
 
     .schedule-table {
-        min-width: 800px;
+        min-width: 700px;
+    }
+
+    .stats-overview {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -376,12 +420,19 @@ body {
         padding: 1rem;
         flex-direction: column;
         gap: 1rem;
+        position: relative;
+    }
+
+    .nav-menu {
+        order: 3;
+        width: 100%;
+        justify-content: center;
     }
 
     .schedule-controls {
         flex-direction: column;
         gap: 1rem;
-        align-items: flex-start;
+        align-items: stretch;
     }
 
     .week-navigation {
@@ -389,12 +440,95 @@ body {
         justify-content: space-between;
     }
 
-    .nav-menu {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
     .stats-overview {
         grid-template-columns: 1fr;
     }
+
+    .student-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .attendance-badge {
+        align-self: flex-start;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .button-group .btn {
+        width: 100%;
+    }
+
+    .user-menu {
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 0.25rem;
+    }
+
+    .card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .schedule-table td {
+        padding: 0.25rem;
+        min-width: 100px;
+    }
+
+    .lecture-cell {
+        padding: 0.25rem;
+    }
+
+    .nav-menu {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-menu .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .legend {
+        justify-content: flex-start;
+    }
+}
+
+/* Поддержка пейзажной ориентации */
+@media (max-width: 768px) and (orientation: landscape) {
+    .dashboard {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .students-list {
+        max-height: 200px;
+    }
+
+    .stats-overview {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Улучшения для навигации */
+.nav-menu .btn {
+    white-space: nowrap;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Фокус-состояния для доступности */
+.btn:focus,
+.lecture-cell:focus,
+.student-edit-item:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
 }
