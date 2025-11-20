@@ -21,10 +21,12 @@ unset($_SESSION['error']);
         </div>
 
         <?php if ($error): ?>
-        <div class="error-message" id="error-message">
-            <?php echo htmlspecialchars($error); ?>
-        </div>
-        <?php endif; ?>
+                <div class="error-message" id="error-message" style="display: block;">
+                    <?php echo htmlspecialchars($error); ?>
+                </div>
+                <?php else: ?>
+                <div class="error-message" id="error-message" style="display: none;"></div>
+                <?php endif; ?>
 
         <form id="login-form" action="auth.php" method="POST">
             <input type="hidden" id="role" name="role" value="">

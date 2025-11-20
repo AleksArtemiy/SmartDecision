@@ -14,6 +14,21 @@ class LoginForm {
     init() {
         this.setupDemoAccounts();
         this.setupFormValidation();
+        this.showServerErrors(); // ← ДОБАВЛЕНО: показ ошибок от сервера
+    }
+
+    // ДОБАВЛЕНО: Показ ошибок, переданных от сервера
+    showServerErrors() {
+        const errorDiv = document.getElementById('error-message');
+        if (errorDiv && errorDiv.textContent.trim()) {
+            // Если есть сообщение об ошибке от сервера, показываем его
+            errorDiv.style.display = 'block';
+
+            // Автоматически скрываем ошибку через 5 секунд
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
     }
 
     setupDemoAccounts() {
@@ -74,6 +89,9 @@ class LoginForm {
         const passwordInput = document.getElementById('password');
 
         form.addEventListener('submit', (e) => {
+            // Скрываем предыдущие ошибки
+            this.hideError();
+
             // Базовая валидация
             if (!usernameInput.value.trim() || !passwordInput.value.trim()) {
                 e.preventDefault();
@@ -81,16 +99,31 @@ class LoginForm {
                 return;
             }
 
+            // ДОБАВЛЕНО: Валидация длины пароля
+            if (passwordInput.value.length < 3) {
+                e.preventDefault();
+                this.showError('Пароль должен содержать минимум 3 символа');
+                return;
+            }
+
             // Определяем роль на основе логина
             const username = usernameInput.value.trim();
             const role = this.determineRole(username);
             document.getElementById('role').value = role;
+
+            // ДОБАВЛЕНО: Показываем индикатор загрузки
+            this.showLoading(true);
         });
 
         // Скрываем блок с ролью при изменении логина
         usernameInput.addEventListener('input', () => {
             const selectedRole = document.getElementById('selected-role');
             selectedRole.style.display = 'none';
+            this.hideError(); // Скрываем ошибки при изменении данных
+        });
+
+        passwordInput.addEventListener('input', () => {
+            this.hideError(); // Скрываем ошибки при изменении данных
         });
     }
 
@@ -116,6 +149,31 @@ class LoginForm {
         }
         errorDiv.textContent = message;
         errorDiv.style.display = 'block';
+
+        // Автоматически скрываем ошибку через 5 секунд
+        setTimeout(() => {
+            this.hideError();
+        }, 5000);
+    }
+
+    // ДОБАВЛЕНО: Скрытие ошибки
+    hideError() {
+        const errorDiv = document.getElementById('error-message');
+        if (errorDiv) {
+            errorDiv.style.display = 'none';
+        }
+    }
+
+    // ДОБАВЛЕНО: Показ индикатора загрузки
+    showLoading(show) {
+        const submitBtn = document.querySelector('#login-form .btn');
+        if (show) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Вход...</span><span>⏳</span>';
+        } else {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>Войти в систему</span><span>→</span>';
+        }
     }
 }
 

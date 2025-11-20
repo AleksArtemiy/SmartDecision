@@ -6,25 +6,25 @@ $users = [
     'student' => [
         'password' => '123',
         'role' => 'student',
-        'redirect' => 'student.php',
+        'redirect' => 'student/student.php',
         'name' => 'Иванов А.С. (Студент)'
     ],
     'headman' => [
         'password' => '123',
         'role' => 'headman',
-        'redirect' => 'headmen.php',
+        'redirect' => 'headmen/headmen.php',
         'name' => 'Петров И.С. (Староста)'
     ],
     'teacher' => [
         'password' => '123',
         'role' => 'teacher',
-        'redirect' => 'teacher.php',
+        'redirect' => 'teacher/teacher.php',
         'name' => 'Иванова А.С. (Преподаватель)'
     ],
     'admin' => [
         'password' => '123',
         'role' => 'admin',
-        'redirect' => 'admin.php',
+        'redirect' => 'admin/admin.php',
         'name' => 'Деканат (Администратор)'
     ]
 ];
