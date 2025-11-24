@@ -985,3 +985,63 @@ body {
         gap: 0.25rem;
     }
 }
+
+/* Стили для бейджей типов предметов */
+.lecture-type-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin: 2px 0;
+}
+
+.lecture-type-lecture {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border: 1px solid #bbdefb;
+}
+
+.lecture-type-practice {
+    background-color: #f3e5f5;
+    color: #7b1fa2;
+    border: 1px solid #e1bee7;
+}
+
+.lecture-type-lab {
+    background-color: #e8f5e8;
+    color: #388e3c;
+    border: 1px solid #c8e6c9;
+}
+
+.lecture-type-seminar {
+    background-color: #fff3e0;
+    color: #f57c00;
+    border: 1px solid #ffe0b2;
+}
+
+.lecture-type-project {
+    background-color: #fce4ec;
+    color: #c2185b;
+    border: 1px solid #f8bbd9;
+}
+
+.lecture-type-default {
+    background-color: #f5f5f5;
+    color: #616161;
+    border: 1px solid #e0e0e0;
+}
+
+/* Обновленные стили для ячеек с предметами */
+.lecture-cell .lecture-name {
+    font-weight: 600;
+    margin-bottom: 4px;
+    line-height: 1.2;
+}
+
+.lecture-cell .lecture-details {
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.3;
+}

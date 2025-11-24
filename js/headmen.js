@@ -1,6 +1,4 @@
 // Данные расписания
-// Данные расписания
-// Данные расписания
 const scheduleData = {
     "18 - 24 ноября 2024": {
         "Понедельник": {
@@ -8,7 +6,8 @@ const scheduleData = {
                 name: "Математический анализ",
                 teacher: "Иванова А.С.",
                 room: "301",
-                canEdit: false, // Прошедшая пара - нельзя редактировать
+                type: "лекция", // ДОБАВЛЕН ТИП ПРЕДМЕТА
+                canEdit: false,
                 attendance: {
                     present: ["Иванов Алексей", "Петрова Мария", "Козлова Анна"],
                     absent: ["Сидоров Владимир"],
@@ -19,7 +18,8 @@ const scheduleData = {
                 name: "Программирование",
                 teacher: "Петров С.В.",
                 room: "415",
-                canEdit: false, // Прошедшая пара - нельзя редактировать
+                type: "практика", // ДОБАВЛЕН ТИП ПРЕДМЕТА
+                canEdit: false,
                 attendance: {
                     present: ["Петрова Мария", "Сидоров Владимир"],
                     absent: ["Иванов Алексей", "Козлова Анна"],
@@ -30,7 +30,8 @@ const scheduleData = {
                 name: "Базы данных",
                 teacher: "Сидорова М.К.",
                 room: "210",
-                canEdit: false, // Прошедшая пара - нельзя редактировать
+                type: "лабораторная", // ДОБАВЛЕН ТИП ПРЕДМЕТА
+                canEdit: false,
                 attendance: {
                     present: ["Иванов Алексей", "Петрова Мария", "Сидоров Владимир", "Козлова Анна"],
                     absent: [],
@@ -43,7 +44,8 @@ const scheduleData = {
                 name: "Физика",
                 teacher: "Козлов Д.И.",
                 room: "305",
-                canEdit: false, // ФИЗИКА ТЕПЕРЬ ПРОШЕДШАЯ - нельзя редактировать
+                type: "лекция", // ДОБАВЛЕН ТИП ПРЕДМЕТА
+                canEdit: false,
                 attendance: {
                     present: ["Иванов Алексей", "Петрова Мария", "Сидоров Владимир"],
                     absent: ["Козлова Анна"],
@@ -54,7 +56,8 @@ const scheduleData = {
                 name: "Английский язык",
                 teacher: "Smith J.",
                 room: "104",
-                canEdit: true, // Текущий день - можно редактировать
+                type: "практика", // ДОБАВЛЕН ТИП ПРЕДМЕТА
+                canEdit: true,
                 attendance: null
             }
         },
@@ -63,14 +66,16 @@ const scheduleData = {
                 name: "Математический анализ",
                 teacher: "Иванова А.С.",
                 room: "301",
-                canEdit: true, // Будущая пара - можно редактировать
+                type: "практика", // ДОБАВЛЕН ТИП ПРЕДМЕТА
+                canEdit: true,
                 attendance: null
             },
             "14:30-16:00": {
                 name: "Веб-разработка",
                 teacher: "Петров С.В.",
                 room: "415",
-                canEdit: true, // Будущая пара - можно редактировать
+                type: "лабораторная", // ДОБАВЛЕН ТИП ПРЕДМЕТА
+                canEdit: true,
                 attendance: null
             }
         },
@@ -79,14 +84,16 @@ const scheduleData = {
                 name: "Алгоритмы",
                 teacher: "Сидорова М.К.",
                 room: "210",
-                canEdit: true, // Будущая пара - можно редактировать
+                type: "лекция", // ДОБАВЛЕН ТИП ПРЕДМЕТА
+                canEdit: true,
                 attendance: null
             },
             "12:00-13:30": {
                 name: "Физкультура",
                 teacher: "Волков А.Н.",
                 room: "Спортзал",
-                canEdit: true, // Будущая пара - можно редактировать
+                type: "практика", // ДОБАВЛЕН ТИП ПРЕДМЕТА
+                canEdit: true,
                 attendance: null
             }
         },
@@ -95,14 +102,16 @@ const scheduleData = {
                 name: "Проектная деятельность",
                 teacher: "Петров С.В.",
                 room: "415",
-                canEdit: true, // Будущая пара - можно редактировать
+                type: "проект", // ДОБАВЛЕН ТИП ПРЕДМЕТА
+                canEdit: true,
                 attendance: null
             },
             "14:30-16:00": {
                 name: "Экономика",
                 teacher: "Новикова Л.П.",
                 room: "208",
-                canEdit: true, // Будущая пара - можно редактировать
+                type: "лекция", // ДОБАВЛЕН ТИП ПРЕДМЕТА
+                canEdit: true,
                 attendance: null
             }
         },
@@ -111,7 +120,8 @@ const scheduleData = {
                 name: "Элективная дисциплина",
                 teacher: "Смирнов П.К.",
                 room: "305",
-                canEdit: true, // Будущая пара - можно редактировать
+                type: "семинар", // ДОБАВЛЕН ТИП ПРЕДМЕТА
+                canEdit: true,
                 attendance: null
             }
         }
@@ -217,6 +227,18 @@ class DashboardManager {
         return 'Риск';
     }
 
+    // ПОЛУЧИТЬ КЛАСС ДЛЯ ТИПА ПРЕДМЕТА
+    getTypeBadgeClass(type) {
+        const typeClasses = {
+            'лекция': 'lecture-type-lecture',
+            'практика': 'lecture-type-practice',
+            'лабораторная': 'lecture-type-lab',
+            'семинар': 'lecture-type-seminar',
+            'проект': 'lecture-type-project'
+        };
+        return typeClasses[type] || 'lecture-type-default';
+    }
+
     // ОТКРЫТЬ РЕДАКТИРОВАНИЕ ПОСЕЩАЕМОСТИ
     openAttendanceJournal(day, time) {
         const weekSchedule = scheduleData[this.currentWeek];
@@ -230,6 +252,7 @@ class DashboardManager {
                 name: lecture.name,
                 teacher: lecture.teacher,
                 room: lecture.room,
+                type: lecture.type, // ПЕРЕДАЕМ ТИП ПРЕДМЕТА
                 week: this.currentWeek,
                 canEdit: true
             };
@@ -287,6 +310,9 @@ class DashboardManager {
                              title="${editTitle}">
                             <div class="attendance-status ${status}"></div>
                             <div class="lecture-name">${lecture.name}</div>
+                            <div class="lecture-type-badge ${this.getTypeBadgeClass(lecture.type)}">
+                                ${lecture.type}
+                            </div>
                             <div class="lecture-details">
                                 ${lecture.teacher}<br>
                                 <span class="lecture-room">${lecture.room}</span>
@@ -438,6 +464,10 @@ class DashboardManager {
                 <div class="info-item">
                     <label>🏫 Аудитория:</label>
                     <span>${lecture.room}</span>
+                </div>
+                <div class="info-item">
+                    <label>📚 Тип занятия:</label>
+                    <span class="lecture-type-badge ${this.getTypeBadgeClass(lecture.type)}">${lecture.type}</span>
                 </div>
                 <div class="info-item ${attendancePercent >= 80 ? 'success' : attendancePercent >= 60 ? 'warning' : 'danger'}">
                     <label>📊 Посещаемость:</label>
