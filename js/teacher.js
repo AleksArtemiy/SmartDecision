@@ -83,13 +83,13 @@ class TeacherDashboard {
                 if (lecture) {
                     dayCell.innerHTML = `
                         <div class="lecture-cell ${lecture.status}" 
-                             data-time="${time}" 
-                             data-day="${day}">
+                            data-time="${time}" 
+                            data-day="${day}">
                             <div class="lecture-name">${lecture.name}</div>
                             <div class="lecture-details">
-                                ${lecture.type ? lecture.type + '<br>' : ''}
-                                ${lecture.room}<br>
-                                ${lecture.groups.join(', ')}
+                                ${lecture.type ? `<div class="lecture-type">${lecture.type}</div>` : ''}
+                                <div class="lecture-room">${lecture.room}</div>
+                                <div class="lecture-groups">${lecture.groups.join(', ')}</div>
                             </div>
                         </div>
                     `;
