@@ -1,0 +1,179 @@
+/* Стили для журнала оценивания */
+
+.grading-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--gray-200);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+    padding: 1.5rem;
+    background: var(--gray-50);
+    border-radius: 0.5rem;
+    border: 1px solid var(--gray-200);
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.info-item strong {
+    color: var(--gray-600);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.grading-controls {
+    display: flex;
+    gap: 1.5rem;
+    align-items: end;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--primary-light);
+    border-radius: 0.5rem;
+    border: 1px solid var(--primary);
+    flex-wrap: wrap;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 150px;
+}
+
+.control-group label {
+    font-weight: 600;
+    color: var(--gray-700);
+    font-size: 0.875rem;
+}
+
+.form-select, .form-input {
+    padding: 0.75rem;
+    border: 1px solid var(--gray-300);
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    background: var(--white);
+}
+
+.form-select:focus, .form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.students-grading-list {
+    max-height: 500px;
+    overflow-y: auto;
+    margin-bottom: 2rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.5rem;
+}
+
+.student-grade-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--gray-100);
+    transition: background-color 0.2s ease;
+    gap: 1rem;
+}
+
+.student-grade-item:hover {
+    background-color: var(--gray-50);
+}
+
+.student-grade-item:last-child {
+    border-bottom: none;
+}
+
+.student-info {
+    flex: 1;
+}
+
+.student-info strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--gray-800);
+}
+
+.student-info small {
+    color: var(--gray-600);
+    font-size: 0.75rem;
+}
+
+.grade-inputs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 120px;
+}
+
+.grade-input {
+    width: 60px;
+    padding: 0.5rem;
+    border: 1px solid var(--gray-300);
+    border-radius: 0.25rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+.grade-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.max-grade {
+    color: var(--gray-500);
+    font-weight: 600;
+    min-width: 30px;
+}
+
+.grade-status {
+    font-size: 0.75rem;
+    font-weight: 600;
+    min-width: 100px;
+    text-align: center;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    background: var(--gray-100);
+    color: var(--gray-600);
+}
+
+.grading-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--gray-200);
+}
+
+@media (max-width: 768px) {
+    .grading-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .student-grade-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .grade-inputs {
+        justify-content: center;
+    }
+    
+    .grading-actions {
+        flex-direction: column;
+    }
+}

@@ -176,8 +176,8 @@ class TeacherDashboard {
             <div class="students-edit-list">
                 ${allStudents.map(student => `
                     <div class="student-view-item ${student.status}"
-                         data-id="${student.id}"
-                         data-group="${student.group}">
+                        data-id="${student.id}"
+                        data-group="${student.group}">
                         <div>
                             <strong>${student.name}</strong><br>
                             <small style="color: var(--gray-600);">${student.group}</small>
@@ -300,6 +300,10 @@ class TeacherDashboard {
         document.getElementById('save-edit-changes').addEventListener('click', () => {
             this.saveEditChanges();
         });
+
+        document.getElementById('grading-journal-btn').addEventListener('click', () => {
+        this.openGradingJournal();
+        });
     }
 
     toggleStudentStatus(studentItem) {
@@ -367,9 +371,34 @@ document.addEventListener('DOMContentLoaded', () => {
     new TeacherDashboard();
 });
 
+openGradingJournal() {
+    if (!this.currentLecture) return;
+
+    // Закрываем модальное окно
+    document.getElementById('view-modal').classList.remove('active');
+    
+    // Передаем данные о паре в журнал оценивания
+    const lectureData = {
+        name: this.currentLecture.name,
+        day: this.currentLecture.day,
+        time: this.currentLecture.time,
+        room: this.currentLecture.room,
+        type: this.currentLecture.type,
+        groups: this.currentLecture.groups,
+        week: this.currentWeek
+    };
+
+    // Сохраняем данные в sessionStorage для передачи на другую страницу
+    sessionStorage.setItem('gradingLectureData', JSON.stringify(lectureData));
+    
+    // Переходим на страницу журнала оценивания
+    window.location.href = 'grading_journal.php';
+}
+
 // Функция выхода из системы
 function logout() {
     if (confirm('Вы уверены, что хотите выйти?')) {
         window.location.href = '../logout.php';
     }
 }
+

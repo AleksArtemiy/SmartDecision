@@ -109,6 +109,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'teacher') {
         </div>
 
         <div class="modal-actions">
+            <button class="btn btn-primary" id="grading-journal-btn">📊 Журнал оценивания</button>
             <button class="btn btn-primary" id="force-edit-btn">Принудительно изменить</button>
             <button class="btn btn-secondary" id="close-view-btn">Закрыть</button>
         </div>
