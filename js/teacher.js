@@ -1,4 +1,6 @@
-// Данные расписания преподавателя
+// Внимание: это полностью обновлённый teacher.js с поддержкой типов занятий
+
+// Данные расписания преподавателя (пример, можно заменить на загрузку с сервера)
 const scheduleData = {
     "18 - 24 ноября 2024": {
         "Понедельник": {
@@ -6,12 +8,14 @@ const scheduleData = {
                 name: "Математический анализ",
                 room: "301",
                 status: "attended",
+                type: "лекция",
                 groups: ["ПИ-201"]
             },
             "13:00-14:30": {
                 name: "Математический анализ",
                 room: "301",
                 status: "missed",
+                type: "практика",
                 groups: ["ПИ-202"]
             }
         },
@@ -20,6 +24,7 @@ const scheduleData = {
                 name: "Высшая математика",
                 room: "415",
                 status: "attended",
+                type: "лабораторная",
                 groups: ["МАТ-101"]
             }
         }
@@ -42,10 +47,7 @@ const studentsData = {
     ]
 };
 
-// Временные интервалы
 const timeSlots = ["9:00-10:30", "10:30-12:00", "13:00-14:30"];
-
-// Дни недели
 const daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
 
 class TeacherDashboard {
@@ -79,13 +81,13 @@ class TeacherDashboard {
                 const lecture = daySchedule[time];
 
                 if (lecture) {
-                    // Убираем кнопку редактирования из ячейки
                     dayCell.innerHTML = `
-                        <div class="lecture-cell ${lecture.status}"
-                             data-time="${time}"
+                        <div class="lecture-cell ${lecture.status}" 
+                             data-time="${time}" 
                              data-day="${day}">
                             <div class="lecture-name">${lecture.name}</div>
                             <div class="lecture-details">
+                                ${lecture.type ? lecture.type + '<br>' : ''}
                                 ${lecture.room}<br>
                                 ${lecture.groups.join(', ')}
                             </div>
@@ -102,16 +104,11 @@ class TeacherDashboard {
         }).join('');
     }
 
-    updateNavigationButtons() {
-        // Для совместимости со стилями
-    }
-
     showNotification(message, type = 'info') {
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
         notification.textContent = message;
         document.body.appendChild(notification);
-
         setTimeout(() => notification.classList.add('show'), 100);
         setTimeout(() => {
             notification.classList.remove('show');
@@ -121,36 +118,35 @@ class TeacherDashboard {
 
     showViewModal(day, time) {
         const weekSchedule = scheduleData[this.currentWeek];
-        const daySchedule = weekSchedule[day];
-        const lecture = daySchedule[time];
+        const lecture = weekSchedule[day][time];
 
-        if (lecture && lecture.groups) {
-            this.currentLecture = { day, time, ...lecture };
+        if (!lecture) return;
 
-            const modal = document.getElementById('view-modal');
-            const modalTitle = document.getElementById('view-modal-title');
-            const modalBody = document.getElementById('view-modal-body');
+        this.currentLecture = { day, time, ...lecture };
 
-            modalTitle.textContent = `${lecture.name} - ${day}, ${time}`;
+        const modal = document.getElementById('view-modal');
+        const modalTitle = document.getElementById('view-modal-title');
+        const modalBody = document.getElementById('view-modal-body');
 
-            // Собираем всех студентов
-            const allStudents = [];
-            lecture.groups.forEach(groupName => {
-                const groupStudents = studentsData[groupName] || [];
-                groupStudents.forEach(student => {
-                    allStudents.push({
-                        ...student,
-                        group: groupName
-                    });
-                });
+        modalTitle.textContent = `${lecture.name} - ${day}, ${time}`;
+
+        const allStudents = [];
+        lecture.groups.forEach(groupName => {
+            (studentsData[groupName] || []).forEach(s => {
+                allStudents.push({ ...s, group: groupName });
             });
+        });
 
-            const presentCount = allStudents.filter(s => s.status === 'present').length;
-            const totalCount = allStudents.length;
-            const attendancePercent = Math.round((presentCount / totalCount) * 100);
+        const presentCount = allStudents.filter(s => s.status === 'present').length;
+        const totalCount = allStudents.length;
+        const attendancePercent = Math.round((presentCount / totalCount) * 100);
 
-            modalBody.innerHTML = `
+        modalBody.innerHTML = `
             <div class="lecture-info-grid" style="margin-bottom: 1.5rem;">
+                <div class="info-item">
+                    <label>📝 Тип занятия:</label>
+                    <span>${lecture.type}</span>
+                </div>
                 <div class="info-item">
                     <label>🏫 Аудитория:</label>
                     <span>${lecture.room}</span>
@@ -164,11 +160,10 @@ class TeacherDashboard {
                     <span>${presentCount}/${totalCount} (${attendancePercent}%)</span>
                 </div>
             </div>
+
             <div class="students-edit-list">
                 ${allStudents.map(student => `
-                    <div class="student-view-item ${student.status}"
-                         data-id="${student.id}"
-                         data-group="${student.group}">
+                    <div class="student-view-item ${student.status}" data-id="${student.id}" data-group="${student.group}">
                         <div>
                             <strong>${student.name}</strong><br>
                             <small style="color: var(--gray-600);">${student.group}</small>
@@ -181,176 +176,20 @@ class TeacherDashboard {
             </div>
         `;
 
-            modal.classList.add('active');
-        }
-    }
-
-
-    showEditModal() {
-        if (!this.currentLecture) return;
-
-        // Сохраняем оригинальные данные для возможности отмены
-        this.originalData = JSON.parse(JSON.stringify(studentsData));
-
-        const modal = document.getElementById('edit-modal');
-        const modalTitle = document.getElementById('edit-modal-title');
-        const modalBody = document.getElementById('edit-modal-body');
-
-        modalTitle.textContent = `${this.currentLecture.name} - ${this.currentLecture.day}, ${this.currentLecture.time}`;
-
-        // Собираем всех студентов
-        const allStudents = [];
-        this.currentLecture.groups.forEach(groupName => {
-            const groupStudents = studentsData[groupName] || [];
-            groupStudents.forEach(student => {
-                allStudents.push({
-                    ...student,
-                    group: groupName
-                });
-            });
-        });
-
-        modalBody.innerHTML = `
-            <div style="margin-bottom: 1rem;">
-                <strong>Аудитория:</strong> ${this.currentLecture.room}<br>
-                <strong>Группы:</strong> ${this.currentLecture.groups.join(', ')}
-            </div>
-            <div class="students-edit-list">
-                ${allStudents.map(student => `
-                    <div class="student-edit-item ${student.status} editable"
-                         data-id="${student.id}"
-                         data-group="${student.group}">
-                        <div>
-                            <strong>${student.name}</strong><br>
-                            <small>${student.group}</small>
-                        </div>
-                        <div>
-                            ${student.status === 'present' ? '✅ Присутствовал' : '❌ Отсутствовал'}
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        `;
-
-        // Закрываем окно просмотра и открываем редактирование
-        document.getElementById('view-modal').classList.remove('active');
         modal.classList.add('active');
     }
 
     setupEventListeners() {
-        document.getElementById('prev-week').addEventListener('click', () => {
-            this.changeWeek(-1);
-        });
-
-        document.getElementById('next-week').addEventListener('click', () => {
-            this.changeWeek(1);
-        });
-
-        // Клики по ячейкам расписания для просмотра
-        document.addEventListener('click', (e) => {
+        document.addEventListener('click', e => {
             const lectureCell = e.target.closest('.lecture-cell:not(.empty)');
             if (lectureCell) {
-                const time = lectureCell.dataset.time;
-                const day = lectureCell.dataset.day;
-                this.showViewModal(day, time);
+                this.showViewModal(lectureCell.dataset.day, lectureCell.dataset.time);
             }
         });
 
-        // Кнопка "Принудительно изменить" в модальном окне просмотра
-        document.getElementById('force-edit-btn').addEventListener('click', () => {
-            this.showEditModal();
-        });
-
-        // Закрытие модального окна просмотра
         document.getElementById('close-view-modal').addEventListener('click', () => {
             document.getElementById('view-modal').classList.remove('active');
         });
-
-        document.getElementById('close-view-btn').addEventListener('click', () => {
-            document.getElementById('view-modal').classList.remove('active');
-        });
-
-        // Клики по студентам в модальном окне редактирования
-        document.addEventListener('click', (e) => {
-            const studentItem = e.target.closest('.student-edit-item.editable');
-            if (studentItem) {
-                this.toggleStudentStatus(studentItem);
-            }
-        });
-
-        // Закрытие модального окна редактирования
-        document.getElementById('close-edit-modal').addEventListener('click', () => {
-            this.closeEditModal();
-        });
-
-        document.getElementById('cancel-edit').addEventListener('click', () => {
-            this.closeEditModal();
-        });
-
-        // Сохранение изменений
-        document.getElementById('save-edit-changes').addEventListener('click', () => {
-            this.saveEditChanges();
-        });
-    }
-
-    toggleStudentStatus(studentItem) {
-        const studentId = studentItem.dataset.id;
-        const groupName = studentItem.dataset.group;
-        const currentStatus = studentItem.classList.contains('present') ? 'present' : 'absent';
-        const newStatus = currentStatus === 'present' ? 'absent' : 'present';
-
-        // Обновляем данные
-        const student = studentsData[groupName].find(s => s.id == studentId);
-        if (student) {
-            student.status = newStatus;
-        }
-
-        // Обновляем внешний вид
-        studentItem.className = `student-edit-item ${newStatus} editable`;
-        const statusText = studentItem.querySelector('div:last-child');
-        statusText.textContent = newStatus === 'present' ? '✅ Присутствовал' : '❌ Отсутствовал';
-    }
-
-    closeEditModal() {
-        // Восстанавливаем оригинальные данные при отмене
-        if (this.originalData) {
-            Object.keys(this.originalData).forEach(groupName => {
-                studentsData[groupName] = [...this.originalData[groupName]];
-            });
-        }
-        document.getElementById('edit-modal').classList.remove('active');
-    }
-
-    saveEditChanges() {
-        if (!this.currentLecture) return;
-
-        // Пересчитываем общий статус пары
-        const allStudents = [];
-        this.currentLecture.groups.forEach(groupName => {
-            const groupStudents = studentsData[groupName] || [];
-            allStudents.push(...groupStudents);
-        });
-
-        const presentCount = allStudents.filter(s => s.status === 'present').length;
-        const totalCount = allStudents.length;
-        const newStatus = presentCount === totalCount ? 'attended' :
-            presentCount === 0 ? 'missed' : 'partial';
-
-        // Обновляем статус пары в расписании
-        const weekSchedule = scheduleData[this.currentWeek];
-        const daySchedule = weekSchedule[this.currentLecture.day];
-        const lecture = daySchedule[this.currentLecture.time];
-        if (lecture) {
-            lecture.status = newStatus;
-        }
-
-        alert('Изменения посещаемости сохранены!');
-        document.getElementById('edit-modal').classList.remove('active');
-        this.renderSchedule();
-    }
-
-    changeWeek(direction) {
-        alert(`Переход к ${direction > 0 ? 'следующей' : 'предыдущей'} неделе`);
     }
 }
 
@@ -358,7 +197,6 @@ document.addEventListener('DOMContentLoaded', () => {
     new TeacherDashboard();
 });
 
-// Функция выхода из системы
 function logout() {
     if (confirm('Вы уверены, что хотите выйти?')) {
         window.location.href = '../logout.php';
