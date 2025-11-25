@@ -365,35 +365,37 @@ class TeacherDashboard {
     changeWeek(direction) {
         alert(`Переход к ${direction > 0 ? 'следующей' : 'предыдущей'} неделе`);
     }
+
+    openGradingJournal() {
+        if (!this.currentLecture) return;
+
+        // Закрываем модальное окно
+        document.getElementById('view-modal').classList.remove('active');
+        
+        // Передаем данные о паре в журнал оценивания
+        const lectureData = {
+            name: this.currentLecture.name,
+            day: this.currentLecture.day,
+            time: this.currentLecture.time,
+            room: this.currentLecture.room,
+            type: this.currentLecture.type,
+            groups: this.currentLecture.groups,
+            week: this.currentWeek
+        };
+
+        // Сохраняем данные в sessionStorage для передачи на другую страницу
+        sessionStorage.setItem('gradingLectureData', JSON.stringify(lectureData));
+        
+        // Переходим на страницу журнала оценивания
+        window.location.href = 'grading_journal.php';
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     new TeacherDashboard();
 });
 
-openGradingJournal() {
-    if (!this.currentLecture) return;
 
-    // Закрываем модальное окно
-    document.getElementById('view-modal').classList.remove('active');
-    
-    // Передаем данные о паре в журнал оценивания
-    const lectureData = {
-        name: this.currentLecture.name,
-        day: this.currentLecture.day,
-        time: this.currentLecture.time,
-        room: this.currentLecture.room,
-        type: this.currentLecture.type,
-        groups: this.currentLecture.groups,
-        week: this.currentWeek
-    };
-
-    // Сохраняем данные в sessionStorage для передачи на другую страницу
-    sessionStorage.setItem('gradingLectureData', JSON.stringify(lectureData));
-    
-    // Переходим на страницу журнала оценивания
-    window.location.href = 'grading_journal.php';
-}
 
 // Функция выхода из системы
 function logout() {
