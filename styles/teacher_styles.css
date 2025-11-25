@@ -743,3 +743,15 @@ body {
         margin: 0.5rem;
     }
 }
+
+.lecture-type {
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 0.125rem;
+    font-size: clamp(0.7rem, 1.3vw, 0.8rem);
+    text-transform: lowercase;
+}
+
+.lecture-type::first-letter {
+    text-transform: uppercase;
+}
