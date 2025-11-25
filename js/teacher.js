@@ -387,7 +387,7 @@ class TeacherDashboard {
         sessionStorage.setItem('gradingLectureData', JSON.stringify(lectureData));
         
         // Переходим на страницу журнала оценивания
-        window.location.href = 'grading_journal.php';
+        window.location.href = '../grading_journal/grading_journal.php';
     }
 }
 
