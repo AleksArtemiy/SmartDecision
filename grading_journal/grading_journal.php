@@ -43,9 +43,9 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'teacher') {
                     <div class="control-group">
                         <label for="group-select">Группа:</label>
                         <select id="group-select" class="form-select">
-                            <option value="ПИ-201" selected>ПИ-201</option>
-                            <option value="ПИ-202">ПИ-202</option>
-                            <option value="МАТ-101">МАТ-101</option>
+                            <option value="5092" selected>5092</option>
+                            <option value="4081">4081</option>
+                            <option value="3094">3094</option>
                         </select>
                     </div>
                     <button class="btn btn-primary" id="load-journal">Обновить данные</button>
@@ -54,7 +54,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'teacher') {
                 <div class="subject-info-card">
                     <div class="info-header">
                         <h4 id="current-subject">Математический анализ</h4>
-                        <span class="group-badge" id="current-group">ПИ-201</span>
+                        <span class="group-badge" id="current-group">5092</span>
                     </div>
                     
                     <div class="stats-grid">
@@ -195,7 +195,7 @@ const scheduleData = {
                 room: "301",
                 status: "attended",
                 type: "лекция",
-                groups: ["ПИ-201", "ПИ-202"],
+                groups: ["5091", "5092"],
                 date: "2024-11-18"
             },
             "13:00-14:30": {
@@ -203,7 +203,7 @@ const scheduleData = {
                 room: "301",
                 status: "missed",
                 type: "практика",
-                groups: ["ПИ-201"],
+                groups: ["5091"],
                 date: "2024-11-18"
             }
         },
@@ -213,7 +213,7 @@ const scheduleData = {
                 room: "415",
                 status: "attended",
                 type: "лабораторная",
-                groups: ["ПИ-201"],
+                groups: ["5092"],
                 date: "2024-11-19"
             }
         },
@@ -223,7 +223,7 @@ const scheduleData = {
                 room: "301",
                 status: "partial",
                 type: "практика",
-                groups: ["ПИ-201"],
+                groups: ["4081"],
                 date: "2024-11-20"
             }
         }
@@ -231,19 +231,19 @@ const scheduleData = {
 };
 
 const studentsData = {
-    "ПИ-201": [
+    "5091": [
         { id: 1, name: "Иванов Алексей", status: "present" },
         { id: 2, name: "Петрова Мария", status: "present" },
         { id: 3, name: "Сидоров Владимир", status: "absent" },
         { id: 4, name: "Козлова Анна", status: "present" }
     ],
-    "ПИ-202": [
+    "5092": [
         { id: 1, name: "Орлова Екатерина", status: "absent" },
         { id: 2, name: "Федоров Максим", status: "absent" },
         { id: 3, name: "Семенова Ирина", status: "present" },
         { id: 4, name: "Волков Андрей", status: "absent" }
     ],
-    "МАТ-101": [
+    "4081": [
         { id: 1, name: "Белов Александр", status: "present" },
         { id: 2, name: "Крылова Виктория", status: "present" },
         { id: 3, name: "Морозов Иван", status: "absent" },

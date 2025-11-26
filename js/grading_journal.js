@@ -7,7 +7,7 @@ const scheduleData = {
                 room: "301",
                 status: "attended",
                 type: "лекция",
-                groups: ["ПИ-201", "ПИ-202"],
+                groups: ["5092", "4081"],
                 date: "2024-11-18"
             },
             "13:00-14:30": {
@@ -15,7 +15,7 @@ const scheduleData = {
                 room: "301",
                 status: "missed",
                 type: "практика",
-                groups: ["ПИ-201"],
+                groups: ["5092"],
                 date: "2024-11-18"
             }
         },
@@ -25,7 +25,7 @@ const scheduleData = {
                 room: "415",
                 status: "attended",
                 type: "лабораторная",
-                groups: ["ПИ-201"],
+                groups: ["5092"],
                 date: "2024-11-19"
             },
             "13:00-14:30": {
@@ -33,7 +33,7 @@ const scheduleData = {
                 room: "305",
                 status: "partial",
                 type: "практика",
-                groups: ["ПИ-202"],
+                groups: ["4081"],
                 date: "2024-11-19"
             }
         },
@@ -43,7 +43,7 @@ const scheduleData = {
                 room: "301",
                 status: "partial",
                 type: "практика",
-                groups: ["ПИ-201"],
+                groups: ["5092"],
                 date: "2024-11-20"
             },
             "13:00-14:30": {
@@ -51,7 +51,7 @@ const scheduleData = {
                 room: "301",
                 status: "attended",
                 type: "лекция",
-                groups: ["ПИ-202"],
+                groups: ["4081"],
                 date: "2024-11-20"
             }
         },
@@ -61,7 +61,7 @@ const scheduleData = {
                 room: "415",
                 status: "attended",
                 type: "семинар",
-                groups: ["ПИ-201", "ПИ-202"],
+                groups: ["5092", "4081"],
                 date: "2024-11-21"
             }
         }
@@ -69,7 +69,7 @@ const scheduleData = {
 };
 
 const studentsData = {
-    "ПИ-201": [
+    "5092": [
         { id: 1, name: "Иванов Алексей", status: "present" },
         { id: 2, name: "Петрова Мария", status: "present" },
         { id: 3, name: "Сидоров Владимир", status: "absent" },
@@ -77,7 +77,7 @@ const studentsData = {
         { id: 5, name: "Николаев Дмитрий", status: "partial" },
         { id: 6, name: "Фролова Елена", status: "present" }
     ],
-    "ПИ-202": [
+    "4081": [
         { id: 1, name: "Орлова Екатерина", status: "absent" },
         { id: 2, name: "Федоров Максим", status: "absent" },
         { id: 3, name: "Семенова Ирина", status: "present" },
@@ -85,7 +85,7 @@ const studentsData = {
         { id: 5, name: "Тихонова Ольга", status: "present" },
         { id: 6, name: "Громов Павел", status: "partial" }
     ],
-    "МАТ-101": [
+    "3094": [
         { id: 1, name: "Белов Александр", status: "present" },
         { id: 2, name: "Крылова Виктория", status: "present" },
         { id: 3, name: "Морозов Иван", status: "absent" },
@@ -96,7 +96,7 @@ const studentsData = {
 
 // Демо-оценки для начального заполнения
 const demoGrades = {
-    // ПИ-201
+    // Группа 5092
     "1-2024-11-18-9:00": { grade: 9, attendance: 'present' },
     "2-2024-11-18-9:00": { grade: 7, attendance: 'present' },
     "4-2024-11-18-9:00": { grade: 8, attendance: 'present' },
@@ -117,7 +117,7 @@ const demoGrades = {
     "4-2024-11-20-9:00": { grade: 7, attendance: 'present' },
     "6-2024-11-20-9:00": { grade: 10, attendance: 'present' },
 
-    // ПИ-202
+    // Группа 4081
     "3-2024-11-18-9:00": { grade: 8, attendance: 'present' },
     "5-2024-11-18-9:00": { grade: 6, attendance: 'present' },
     
@@ -137,11 +137,12 @@ const demoGrades = {
 const timeSlots = ["9:00-10:30", "10:30-12:00", "13:00-14:30"];
 const daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
 
+
 // Журнал оценивания с компактным layout
 class GradingJournal {
     constructor() {
         this.currentSubject = 'Математический анализ';
-        this.currentGroup = 'ПИ-201';
+        this.currentGroup = '5092'; // Группа по умолчанию
         this.editingCell = null;
         this.gradesData = this.loadGradesFromStorage();
         this.init();
@@ -151,35 +152,45 @@ class GradingJournal {
         this.updateSidebarInfo();
         this.renderJournal();
         this.setupEventListeners();
+        this.fixMobileLayout();
+        this.addHorizontalScrollIndicator();
+    }
+    
+    fixMobileLayout() {
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll('.student-name').forEach(cell => {
+                cell.style.backgroundColor = getComputedStyle(cell).backgroundColor;
+            });
+        }
     }
 
     loadGradesFromStorage() {
-    // Пытаемся загрузить из localStorage
-    const saved = localStorage.getItem(`grades_${this.currentSubject}_${this.currentGroup}`);
-    
-    if (saved) {
-        return JSON.parse(saved);
-    }
-    
-    // Если нет сохраненных данных, используем демо-данные для текущей группы
-    const demoGradesForGroup = {};
-    
-    Object.keys(demoGrades).forEach(key => {
-        const parts = key.split('-');
-        const studentId = parts[0];
-        const lectureDate = parts.slice(1, 4).join('-');
-        const lectureTime = parts.slice(4).join('-');
-        const lectureKey = `${lectureDate}-${lectureTime}`;
+        // Пытаемся загрузить из localStorage
+        const saved = localStorage.getItem(`grades_${this.currentSubject}_${this.currentGroup}`);
         
-        const student = studentsData[this.currentGroup]?.find(s => s.id == studentId);
-        
-        if (student) {
-            demoGradesForGroup[key] = demoGrades[key];
+        if (saved) {
+            return JSON.parse(saved);
         }
-    });
-    
-    return demoGradesForGroup;
-}
+        
+        // Если нет сохраненных данных, используем демо-данные для текущей группы
+        const demoGradesForGroup = {};
+        
+        Object.keys(demoGrades).forEach(key => {
+            const parts = key.split('-');
+            const studentId = parts[0];
+            const lectureDate = parts.slice(1, 4).join('-');
+            const lectureTime = parts.slice(4).join('-');
+            const lectureKey = `${lectureDate}-${lectureTime}`;
+            
+            const student = studentsData[this.currentGroup]?.find(s => s.id == studentId);
+            
+            if (student) {
+                demoGradesForGroup[key] = demoGrades[key];
+            }
+        });
+        
+        return demoGradesForGroup;
+    }
 
     saveGradesToStorage() {
         localStorage.setItem(`grades_${this.currentSubject}_${this.currentGroup}`, JSON.stringify(this.gradesData));
@@ -229,6 +240,11 @@ class GradingJournal {
     renderJournal() {
         const lectures = this.getLecturesForSubject();
         const students = studentsData[this.currentGroup] || [];
+        
+        console.log('Lectures:', lectures);
+        console.log('Students:', students);
+        console.log('Current group:', this.currentGroup);
+        console.log('Current subject:', this.currentSubject);
         
         this.renderTableHeader(lectures);
         this.renderTableBody(students, lectures);
@@ -472,7 +488,7 @@ class GradingJournal {
         }
 
         const grade = parseInt(gradeValue);
-        if (grade < 0 || grade > 10) {
+        if (grade < 0 || grade > 10 || isNaN(grade)) {
             alert('Оценка должна быть от 0 до 10');
             input.focus();
             input.select();
@@ -502,17 +518,22 @@ class GradingJournal {
         this.updateSidebarInfo();
         this.renderJournal();
     }
-    renderJournal() {
-        const lectures = this.getLecturesForSubject();
-        const students = studentsData[this.currentGroup] || [];
-        
-        console.log('Lectures:', lectures);
-        console.log('Students:', students);
-        console.log('Current group:', this.currentGroup);
-        console.log('Current subject:', this.currentSubject);
-        
-        this.renderTableHeader(lectures);
-        this.renderTableBody(students, lectures);
+
+    addHorizontalScrollIndicator() {
+        if (window.innerWidth <= 768) {
+            const tableContainer = document.querySelector('.table-container');
+            if (tableContainer) {
+                let scrollTimeout;
+                
+                tableContainer.addEventListener('scroll', () => {
+                    tableContainer.classList.add('scrolling');
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(() => {
+                        tableContainer.classList.remove('scrolling');
+                    }, 1000);
+                });
+            }
+        }
     }
 }
 
