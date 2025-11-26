@@ -19,7 +19,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'headman') {
 <header class="header">
     <div class="logo">Журнал 2.0</div>
     <div class="user-menu">
-        <span>Староста: Петров И.С. | Группа: ПИ-201</span>
+        <span>Староста: Петров И.С. | Группа: 5091</span>
         <button class="btn btn-secondary" onclick="logout()">Выйти</button>
     </div>
 </header>

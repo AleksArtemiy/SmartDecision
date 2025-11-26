@@ -1,24 +1,24 @@
 // Данные для админпанели
 const adminData = {
     groups: [
-        { name: "ПИ-201", faculty: "ФИТ", course: 2, students: 25, attendance: 87, riskCount: 2 },
-        { name: "ПИ-202", faculty: "ФИТ", course: 2, students: 24, attendance: 78, riskCount: 5 },
-        { name: "ПИ-203", faculty: "ФИТ", course: 2, students: 23, attendance: 92, riskCount: 1 },
-        { name: "ИВТ-201", faculty: "ФИТ", course: 2, students: 28, attendance: 81, riskCount: 3 },
-        { name: "МАТ-101", faculty: "МФ", course: 1, students: 30, attendance: 75, riskCount: 8 },
-        { name: "ФИЗ-101", faculty: "МФ", course: 1, students: 26, attendance: 69, riskCount: 7 },
-        { name: "ЭК-201", faculty: "ЭФ", course: 2, students: 22, attendance: 85, riskCount: 2 },
-        { name: "МЕН-301", faculty: "ЭФ", course: 3, students: 20, attendance: 88, riskCount: 1 }
+        { name: "5091", faculty: "ФИТ", course: 2, students: 25, attendance: 87, riskCount: 2 },
+        { name: "502", faculty: "ФИТ", course: 2, students: 24, attendance: 78, riskCount: 5 },
+        { name: "5093", faculty: "ФИТ", course: 2, students: 23, attendance: 92, riskCount: 1 },
+        { name: "4081", faculty: "ФИТ", course: 2, students: 28, attendance: 81, riskCount: 3 },
+        { name: "3071", faculty: "МФ", course: 1, students: 30, attendance: 75, riskCount: 8 },
+        { name: "5192", faculty: "МФ", course: 1, students: 26, attendance: 69, riskCount: 7 },
+        { name: "5171", faculty: "ЭФ", course: 2, students: 22, attendance: 85, riskCount: 2 },
+        { name: "4033", faculty: "ЭФ", course: 3, students: 20, attendance: 88, riskCount: 1 }
     ],
     students: [
-        { name: "Иванов Алексей", group: "ПИ-201", id: "201001", attendance: 95, present: 57, absent: 3 },
-        { name: "Петрова Мария", group: "ПИ-201", id: "201002", attendance: 88, present: 53, absent: 7 },
-        { name: "Сидоров Владимир", group: "ПИ-202", id: "201003", attendance: 67, present: 40, absent: 20 },
-        { name: "Козлова Анна", group: "ПИ-202", id: "201004", attendance: 78, present: 47, absent: 13 },
-        { name: "Николаев Дмитрий", group: "ПИ-203", id: "201005", attendance: 92, present: 55, absent: 5 },
-        { name: "Орлова Екатерина", group: "ИВТ-201", id: "201006", attendance: 81, present: 49, absent: 11 },
-        { name: "Федоров Максим", group: "МАТ-101", id: "201007", attendance: 45, present: 27, absent: 33 },
-        { name: "Семенова Ирина", group: "ФИЗ-101", id: "201008", attendance: 72, present: 43, absent: 17 }
+        { name: "Иванов Алексей", group: "5091", id: "201001", attendance: 95, present: 57, absent: 3 },
+        { name: "Петрова Мария", group: "5091", id: "201002", attendance: 88, present: 53, absent: 7 },
+        { name: "Сидоров Владимир", group: "5092", id: "201003", attendance: 67, present: 40, absent: 20 },
+        { name: "Козлова Анна", group: "5092", id: "201004", attendance: 78, present: 47, absent: 13 },
+        { name: "Николаев Дмитрий", group: "5093", id: "201005", attendance: 92, present: 55, absent: 5 },
+        { name: "Орлова Екатерина", group: "4081", id: "201006", attendance: 81, present: 49, absent: 11 },
+        { name: "Федоров Максим", group: "3071", id: "201007", attendance: 45, present: 27, absent: 33 },
+        { name: "Семенова Ирина", group: "5192", id: "201008", attendance: 72, present: 43, absent: 17 }
     ],
     teachers: [
         { name: "Иванова Анна Сергеевна", position: "Доцент", faculty: "ФИТ", groups: 8, subjects: 3, attendance: 84 },

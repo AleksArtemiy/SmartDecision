@@ -2,41 +2,41 @@
 const scheduleData = {
     "18 - 24 ноября 2024": {
         "Понедельник": {
-            "9:00-10:30": { name: "Математический анализ", teacher: "Иванова А.С.", room: "301", status: "attended", type: "лекция" },
-            "10:30-12:00": { name: "Программирование", teacher: "Петров С.В.", room: "415", status: "attended", type: "практика" },
-            "13:00-14:30": { name: "Базы данных", teacher: "Сидорова М.К.", room: "210", status: "missed", type: "лабораторная" }
+            "9:00-10:30": { name: "Математический анализ", teacher: "Иванова А.С.", room: "3301", status: "attended", type: "лекция" },
+            "10:30-12:00": { name: "Программирование", teacher: "Петров С.В.", room: "4215", status: "attended", type: "практика" },
+            "13:00-14:30": { name: "Базы данных", teacher: "Сидорова М.К.", room: "2410", status: "missed", type: "лабораторная" }
         },
         "Вторник": {
-            "9:00-10:30": { name: "Физика", teacher: "Козлов Д.И.", room: "305", status: "attended", type: "лекция" },
-            "13:00-14:30": { name: "Английский язык", teacher: "Smith J.", room: "104", status: "cancelled", type: "практика" }
+            "9:00-10:30": { name: "Физика", teacher: "Козлов Д.И.", room: "3305", status: "attended", type: "лекция" },
+            "13:00-14:30": { name: "Английский язык", teacher: "Smith J.", room: "1304", status: "cancelled", type: "практика" }
         },
         "Среда": {
-            "10:30-12:00": { name: "Математический анализ", teacher: "Иванова А.С.", room: "301", status: "attended", type: "практика" },
-            "14:30-16:00": { name: "Веб-разработка", teacher: "Петров С.В.", room: "415", status: "future", type: "лабораторная" }
+            "10:30-12:00": { name: "Математический анализ", teacher: "Иванова А.С.", room: "3301", status: "attended", type: "практика" },
+            "14:30-16:00": { name: "Веб-разработка", teacher: "Петров С.В.", room: "4215", status: "future", type: "лабораторная" }
         },
         "Четверг": {
-            "9:00-10:30": { name: "Алгоритмы", teacher: "Сидорова М.К.", room: "210", status: "attended", type: "лекция" },
+            "9:00-10:30": { name: "Алгоритмы", teacher: "Сидорова М.К.", room: "1010", status: "attended", type: "лекция" },
             "12:00-13:30": { name: "Физкультура", teacher: "Волков А.Н.", room: "Спортзал", status: "missed", type: "практика" }
         },
         "Пятница": {
-            "11:00-12:30": { name: "Проектная деятельность", teacher: "Петров С.В.", room: "415", status: "future", type: "семинар" },
-            "14:30-16:00": { name: "Экономика", teacher: "Новикова Л.П.", room: "208", status: "future", type: "лекция" }
+            "11:00-12:30": { name: "Проектная деятельность", teacher: "Петров С.В.", room: "4215", status: "future", type: "семинар" },
+            "14:30-16:00": { name: "Экономика", teacher: "Новикова Л.П.", room: "1108", status: "future", type: "лекция" }
         },
         "Суббота": {
-            "9:00-10:30": { name: "Элективная дисциплина", teacher: "Смирнов П.К.", room: "305", status: "future", type: "лекция" }
+            "9:00-10:30": { name: "Элективная дисциплина", teacher: "Смирнов П.К.", room: "3305", status: "future", type: "лекция" }
         }
     },
     "25 ноября - 1 декабря 2024": {
         "Понедельник": {
-            "9:00-10:30": { name: "Математический анализ", teacher: "Иванова А.С.", room: "301", status: "future", type: "лекция" },
-            "13:00-14:30": { name: "Программирование", teacher: "Петров С.В.", room: "415", status: "future", type: "практика" }
+            "9:00-10:30": { name: "Математический анализ", teacher: "Иванова А.С.", room: "3301", status: "future", type: "лекция" },
+            "13:00-14:30": { name: "Программирование", teacher: "Петров С.В.", room: "4215", status: "future", type: "практика" }
         },
         "Вторник": {
-            "10:30-12:00": { name: "Базы данных", teacher: "Сидорова М.К.", room: "210", status: "future", type: "лабораторная" }
+            "10:30-12:00": { name: "Базы данных", teacher: "Сидорова М.К.", room: "2510", status: "future", type: "лабораторная" }
         },
         "Среда": {
             "9:00-10:30": { name: "Физика", teacher: "Козлов Д.И.", room: "305", status: "future", type: "лекция" },
-            "14:30-16:00": { name: "Английский язык", teacher: "Smith J.", room: "104", status: "future", type: "практика" }
+            "14:30-16:00": { name: "Английский язык", teacher: "Smith J.", room: "1304", status: "future", type: "практика" }
         }
     }
 };

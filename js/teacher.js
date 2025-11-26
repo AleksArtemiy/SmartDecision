@@ -4,26 +4,26 @@ const scheduleData = {
         "Понедельник": {
             "9:00-10:30": {
                 name: "Математический анализ",
-                room: "301",
+                room: "3301",
                 status: "attended",
                 type: "лекция", // ДОБАВЛЕНО
-                groups: ["ПИ-201"]
+                groups: ["5091"]
             },
             "13:00-14:30": {
                 name: "Математический анализ",
-                room: "301",
+                room: "3301",
                 status: "missed",
                 type: "практика", // ДОБАВЛЕНО
-                groups: ["ПИ-202"]
+                groups: ["5092"]
             }
         },
         "Вторник": {
             "10:30-12:00": {
                 name: "Высшая математика",
-                room: "415",
+                room: "4215",
                 status: "attended",
                 type: "лабораторная", // ДОБАВЛЕНО
-                groups: ["МАТ-101"]
+                groups: ["4081"]
             }
         }
     }
@@ -31,13 +31,13 @@ const scheduleData = {
 
 // Данные студентов по группам
 const studentsData = {
-    "ПИ-201": [
+    "5091": [
         { id: 1, name: "Иванов Алексей", status: "present" },
         { id: 2, name: "Петрова Мария", status: "present" },
         { id: 3, name: "Сидоров Владимир", status: "absent" },
         { id: 4, name: "Козлова Анна", status: "present" }
     ],
-    "ПИ-202": [
+    "5092": [
         { id: 1, name: "Орлова Екатерина", status: "absent" },
         { id: 2, name: "Федоров Максим", status: "absent" },
         { id: 3, name: "Семенова Ирина", status: "present" },

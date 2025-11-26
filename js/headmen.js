@@ -5,7 +5,7 @@ const scheduleData = {
             "9:00-10:30": {
                 name: "Математический анализ",
                 teacher: "Иванова А.С.",
-                room: "301",
+                room: "3301",
                 type: "лекция", // ДОБАВЛЕН ТИП ПРЕДМЕТА
                 canEdit: false,
                 attendance: {
@@ -17,7 +17,7 @@ const scheduleData = {
             "10:30-12:00": {
                 name: "Программирование",
                 teacher: "Петров С.В.",
-                room: "415",
+                room: "4215",
                 type: "практика", // ДОБАВЛЕН ТИП ПРЕДМЕТА
                 canEdit: false,
                 attendance: {
@@ -29,7 +29,7 @@ const scheduleData = {
             "13:00-14:30": {
                 name: "Базы данных",
                 teacher: "Сидорова М.К.",
-                room: "210",
+                room: "2410",
                 type: "лабораторная", // ДОБАВЛЕН ТИП ПРЕДМЕТА
                 canEdit: false,
                 attendance: {
@@ -43,7 +43,7 @@ const scheduleData = {
             "9:00-10:30": {
                 name: "Физика",
                 teacher: "Козлов Д.И.",
-                room: "305",
+                room: "3305",
                 type: "лекция", // ДОБАВЛЕН ТИП ПРЕДМЕТА
                 canEdit: false,
                 attendance: {
@@ -55,7 +55,7 @@ const scheduleData = {
             "13:00-14:30": {
                 name: "Английский язык",
                 teacher: "Smith J.",
-                room: "104",
+                room: "1304",
                 type: "практика", // ДОБАВЛЕН ТИП ПРЕДМЕТА
                 canEdit: true,
                 attendance: null
@@ -65,7 +65,7 @@ const scheduleData = {
             "10:30-12:00": {
                 name: "Математический анализ",
                 teacher: "Иванова А.С.",
-                room: "301",
+                room: "3301",
                 type: "практика", // ДОБАВЛЕН ТИП ПРЕДМЕТА
                 canEdit: true,
                 attendance: null
@@ -73,7 +73,7 @@ const scheduleData = {
             "14:30-16:00": {
                 name: "Веб-разработка",
                 teacher: "Петров С.В.",
-                room: "415",
+                room: "4215",
                 type: "лабораторная", // ДОБАВЛЕН ТИП ПРЕДМЕТА
                 canEdit: true,
                 attendance: null
@@ -83,7 +83,7 @@ const scheduleData = {
             "9:00-10:30": {
                 name: "Алгоритмы",
                 teacher: "Сидорова М.К.",
-                room: "210",
+                room: "2310",
                 type: "лекция", // ДОБАВЛЕН ТИП ПРЕДМЕТА
                 canEdit: true,
                 attendance: null
@@ -101,7 +101,7 @@ const scheduleData = {
             "11:00-12:30": {
                 name: "Проектная деятельность",
                 teacher: "Петров С.В.",
-                room: "415",
+                room: "4215",
                 type: "проект", // ДОБАВЛЕН ТИП ПРЕДМЕТА
                 canEdit: true,
                 attendance: null
@@ -109,7 +109,7 @@ const scheduleData = {
             "14:30-16:00": {
                 name: "Экономика",
                 teacher: "Новикова Л.П.",
-                room: "208",
+                room: "2308",
                 type: "лекция", // ДОБАВЛЕН ТИП ПРЕДМЕТА
                 canEdit: true,
                 attendance: null
@@ -119,7 +119,7 @@ const scheduleData = {
             "9:00-10:30": {
                 name: "Элективная дисциплина",
                 teacher: "Смирнов П.К.",
-                room: "305",
+                room: "3305",
                 type: "семинар", // ДОБАВЛЕН ТИП ПРЕДМЕТА
                 canEdit: true,
                 attendance: null

@@ -20,7 +20,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'student') {
 <header class="header">
     <a href="../Headmen/index.html" class="logo">Журнал 2.0</a>
     <div class="user-menu">
-        <span>Студент: Иванов А.С. | Группа: ПИ-201</span>
+        <span>Студент: Иванов А.С. | Группа: 5091</span>
         <button class="btn btn-secondary" onclick="logout()">Выйти</button>
     </div>
 </header>
