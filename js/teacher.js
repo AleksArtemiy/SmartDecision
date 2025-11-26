@@ -153,42 +153,42 @@ class TeacherDashboard {
             const attendancePercent = Math.round((presentCount / totalCount) * 100);
 
             modalBody.innerHTML = `
-            <div class="lecture-info-grid" style="margin-bottom: 1.5rem;">
-                ${lecture.type ? `
-                <div class="info-item">
-                    <label>📝 Тип занятия:</label>
-                    <span>${lecture.type}</span>
-                </div>
-                ` : ''}
-                <div class="info-item">
-                    <label>🏫 Аудитория:</label>
-                    <span>${lecture.room}</span>
-                </div>
-                <div class="info-item">
-                    <label>👥 Группы:</label>
-                    <span>${lecture.groups.join(', ')}</span>
-                </div>
-                <div class="info-item ${attendancePercent >= 80 ? 'success' : attendancePercent >= 60 ? 'warning' : 'danger'}">
-                    <label>📊 Посещаемость:</label>
-                    <span>${presentCount}/${totalCount} (${attendancePercent}%)</span>
-                </div>
-            </div>
-            <div class="students-edit-list">
-                ${allStudents.map(student => `
-                    <div class="student-view-item ${student.status}"
-                        data-id="${student.id}"
-                        data-group="${student.group}">
-                        <div>
-                            <strong>${student.name}</strong><br>
-                            <small style="color: var(--gray-600);">${student.group}</small>
-                        </div>
-                        <div style="font-weight: 600; color: ${student.status === 'present' ? 'var(--success)' : 'var(--danger)'}">
-                            ${student.status === 'present' ? '✅ Присутствовал' : '❌ Отсутствовал'}
-                        </div>
+                <div class="lecture-info-grid" style="margin-bottom: 1.5rem;">
+                    ${lecture.type ? `
+                    <div class="info-item">
+                        <label>📝 Тип занятия:</label>
+                        <span>${lecture.type}</span>
                     </div>
-                `).join('')}
-            </div>
-        `;
+                    ` : ''}
+                    <div class="info-item">
+                        <label>🏫 Аудитория:</label>
+                        <span>${lecture.room}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>👥 Группы:</label>
+                        <span>${lecture.groups.join(', ')}</span>
+                    </div>
+                    <div class="info-item ${attendancePercent >= 80 ? 'success' : attendancePercent >= 60 ? 'warning' : 'danger'}">
+                        <label>📊 Посещаемость:</label>
+                        <span>${presentCount}/${totalCount} (${attendancePercent}%)</span>
+                    </div>
+                </div>
+                <div class="students-edit-list">
+                    ${allStudents.map(student => `
+                        <div class="student-view-item ${student.status}"
+                            data-id="${student.id}"
+                            data-group="${student.group}">
+                            <div class="student-info">
+                                <div class="student-name">${student.name}</div>
+                                <div class="student-group">${student.group}</div>
+                            </div>
+                            <div class="attendance-badge">
+                                ${student.status === 'present' ? '✅ Присутствовал' : '❌ Отсутствовал'}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                `;
 
             modal.classList.add('active');
         }
@@ -227,13 +227,13 @@ class TeacherDashboard {
             <div class="students-edit-list">
                 ${allStudents.map(student => `
                     <div class="student-edit-item ${student.status} editable"
-                         data-id="${student.id}"
-                         data-group="${student.group}">
-                        <div>
-                            <strong>${student.name}</strong><br>
-                            <small>${student.group}</small>
+                        data-id="${student.id}"
+                        data-group="${student.group}">
+                        <div class="student-info">
+                            <div class="student-name">${student.name}</div>
+                            <div class="student-group">${student.group}</div>
                         </div>
-                        <div>
+                        <div class="attendance-badge">
                             ${student.status === 'present' ? '✅ Присутствовал' : '❌ Отсутствовал'}
                         </div>
                     </div>

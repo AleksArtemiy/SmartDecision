@@ -1,4 +1,10 @@
 /* Стили для кабинета преподавателя - ОБНОВЛЕННЫЕ */
+:root {
+    --modal-breakpoint: 768px;
+    --modal-mobile-padding: 1rem;
+    --modal-desktop-padding: 2rem;
+}
+
 body {
     background-color: var(--gray-100);
     color: var(--gray-800);
@@ -6,7 +12,7 @@ body {
     min-height: 100dvh;
 }
 
-/* Шапка - как у студента */
+/* Шапка */
 .header {
     background: var(--white);
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -59,6 +65,7 @@ body {
     overflow: hidden;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     border: 1px solid var(--gray-200);
+    animation: fadeInUp 0.6s ease-out;
 }
 
 .card:hover {
@@ -129,7 +136,7 @@ body {
     border: 2px solid var(--primary);
 }
 
-/* КОНТЕЙНЕР ДЛЯ ТАБЛИЦЫ РАСПИСАНИЯ - как у студента */
+/* Контейнер для таблицы расписания */
 .schedule-container {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -183,7 +190,7 @@ body {
     50% { transform: translateY(-50%) translateX(-5px); }
 }
 
-/* Таблица расписания - улучшенная */
+/* Таблица расписания */
 .schedule-table {
     width: 100%;
     border-collapse: collapse;
@@ -221,7 +228,7 @@ body {
     background-color: var(--gray-50);
 }
 
-/* Колонка времени - фиксированная слева */
+/* Колонка времени */
 .time-column {
     background: var(--gray-100);
     font-weight: 600;
@@ -235,6 +242,7 @@ body {
     border-right: 2px solid var(--gray-300);
 }
 
+/* Ячейки пар */
 .lecture-cell {
     background: var(--primary-light);
     border-radius: 0.375rem;
@@ -288,6 +296,18 @@ body {
     box-shadow: none;
 }
 
+.lecture-type {
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 0.125rem;
+    font-size: clamp(0.7rem, 1.3vw, 0.8rem);
+    text-transform: lowercase;
+}
+
+.lecture-type::first-letter {
+    text-transform: uppercase;
+}
+
 .lecture-name {
     font-weight: 600;
     font-size: clamp(0.8rem, 1.5vw, 0.95rem);
@@ -329,6 +349,7 @@ body {
     text-align: center;
     border-left: 6px solid var(--primary);
     transition: transform 0.2s ease;
+    animation: fadeInUp 0.8s ease-out;
 }
 
 .stat-card:hover {
@@ -359,20 +380,14 @@ body {
 
 .stat-value.good {
     background: linear-gradient(135deg, var(--success), #059669);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 .stat-value.warning {
     background: linear-gradient(135deg, var(--warning), #d97706);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 .stat-value.danger {
     background: linear-gradient(135deg, var(--danger), #dc2626);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 .stat-label {
@@ -407,7 +422,7 @@ body {
     background: linear-gradient(90deg, var(--danger), #ef4444);
 }
 
-/* Легенда - как у студента */
+/* Легенда */
 .legend {
     display: flex;
     gap: clamp(1rem, 3vw, 2rem);
@@ -457,9 +472,8 @@ body {
     border-color: var(--warning);
 }
 
-/* Модальные окна - улучшенные */
-.view-modal,
-.edit-modal {
+/* УНИФИЦИРОВАННЫЕ СТИЛИ МОДАЛЬНЫХ ОКОН */
+.modal-overlay {
     display: none;
     position: fixed;
     top: 0;
@@ -470,37 +484,63 @@ body {
     z-index: 1000;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
+    padding: var(--modal-mobile-padding);
     backdrop-filter: blur(4px);
-}
-
-.view-modal.active,
-.edit-modal.active {
-    display: flex;
     animation: fadeIn 0.3s ease;
 }
 
-.view-modal-content,
-.edit-modal-content {
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-content {
     background: var(--white);
     border-radius: 1rem;
     padding: 0;
     max-width: min(600px, 95vw);
     width: 100%;
-    max-height: min(80vh, 600px);
+    max-height: min(90vh, 700px);
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     animation: slideUp 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Мобильная оптимизация модальных окон */
+@media (max-width: 768px) {
+    .modal-overlay {
+        padding: 0.5rem;
+        align-items: flex-end;
+    }
+    
+    .modal-content {
+        max-width: 100%;
+        max-height: 90vh;
+        border-radius: 1rem 1rem 0 0;
+        margin-bottom: 0;
+    }
+    
+    .modal-content::before {
+        content: '';
+        width: 40px;
+        height: 4px;
+        background: var(--gray-300);
+        border-radius: 2px;
+        margin: 0.75rem auto;
+        display: block;
+    }
 }
 
 .modal-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem 2rem;
+    align-items: flex-start;
+    padding: clamp(1.25rem, 3vw, 1.5rem) clamp(1.5rem, 4vw, 2rem);
     border-bottom: 1px solid var(--gray-200);
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: var(--white);
+    flex-shrink: 0;
 }
 
 .modal-title {
@@ -509,12 +549,13 @@ body {
     line-height: 1.3;
     word-break: break-word;
     margin: 0;
+    padding-right: 1rem;
 }
 
 .close-modal {
     background: none;
     border: none;
-    font-size: 2rem;
+    font-size: 1.75rem;
     color: var(--white);
     cursor: pointer;
     width: 40px;
@@ -524,6 +565,7 @@ body {
     justify-content: center;
     border-radius: 50%;
     transition: background-color 0.2s ease;
+    flex-shrink: 0;
 }
 
 .close-modal:hover {
@@ -531,10 +573,28 @@ body {
 }
 
 .modal-body {
-    padding: 2rem;
-    max-height: 400px;
+    padding: clamp(1.5rem, 4vw, 2rem);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    flex: 1;
+}
+
+/* Улучшенная прокрутка для модальных окон */
+.modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: var(--gray-100);
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: var(--gray-300);
+    border-radius: 3px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-400);
 }
 
 /* Списки студентов в модалках */
@@ -544,8 +604,7 @@ body {
     -webkit-overflow-scrolling: touch;
 }
 
-.student-view-item,
-.student-edit-item {
+.student-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -556,35 +615,34 @@ body {
     transition: all 0.2s;
     flex-wrap: wrap;
     gap: 0.5rem;
+    word-break: break-word;
 }
 
-.student-view-item.present,
-.student-edit-item.present {
+.student-item.present {
     background: linear-gradient(135deg, var(--success-light), #e8f5e8);
-    border-color: var(--success-border);
+    border-color: var(--success);
 }
 
-.student-view-item.absent,
-.student-edit-item.absent {
+.student-item.absent {
     background: linear-gradient(135deg, var(--danger-light), #feebeb);
-    border-color: var(--danger-border);
+    border-color: var(--danger);
 }
 
-.student-edit-item {
+.student-item.editable {
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
-.student-edit-item:hover {
+.student-item.editable:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.student-view-item:not(.editable) {
+.student-item:not(.editable) {
     cursor: default;
 }
 
-.student-view-item:not(.editable):hover {
+.student-item:not(.editable):hover {
     transform: none;
     box-shadow: none;
 }
@@ -601,16 +659,42 @@ body {
     border: 1px solid var(--primary);
 }
 
-.modal-actions,
-.quick-actions {
+.modal-actions {
     display: flex;
     gap: 1rem;
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
+    padding: clamp(1.25rem, 3vw, 1.5rem) clamp(1.5rem, 4vw, 2rem);
     border-top: 1px solid var(--gray-200);
     justify-content: flex-end;
     flex-wrap: wrap;
-    padding: 1.5rem 2rem;
+    flex-shrink: 0;
+    background: var(--gray-50);
+}
+
+/* Адаптивные кнопки в модалках */
+@media (max-width: 768px) {
+    .modal-actions {
+        flex-direction: column-reverse;
+        gap: 0.75rem;
+    }
+    
+    .modal-actions .btn {
+        width: 100%;
+        margin: 0;
+    }
+    
+    .student-item {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+    
+    .modal-header {
+        padding: 1.25rem 1.5rem;
+    }
+    
+    .modal-body {
+        padding: 1.5rem;
+    }
 }
 
 /* Анимации */
@@ -639,14 +723,6 @@ body {
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
-}
-
-.card {
-    animation: fadeInUp 0.6s ease-out;
-}
-
-.stat-card {
-    animation: fadeInUp 0.8s ease-out;
 }
 
 /* Мобильные стили */
@@ -686,31 +762,6 @@ body {
         align-items: flex-start;
         gap: 1rem;
     }
-
-    .modal-header {
-        padding: 1.25rem 1.5rem;
-    }
-
-    .modal-body {
-        padding: 1.5rem;
-    }
-
-    .modal-actions,
-    .quick-actions {
-        flex-direction: column;
-        padding: 1.25rem 1.5rem;
-    }
-
-    .modal-actions .btn,
-    .quick-actions .btn {
-        width: 100%;
-    }
-
-    .student-view-item,
-    .student-edit-item {
-        flex-direction: column;
-        align-items: flex-start;
-    }
 }
 
 @media (max-width: 480px) {
@@ -737,21 +788,206 @@ body {
         padding: 0.625rem 1rem;
         font-size: 0.875rem;
     }
-
-    .view-modal-content,
-    .edit-modal-content {
-        margin: 0.5rem;
+    
+    .modal-overlay {
+        padding: 0.25rem;
     }
 }
 
-.lecture-type {
-    font-weight: 600;
-    color: var(--primary-dark);
-    margin-bottom: 0.125rem;
-    font-size: clamp(0.7rem, 1.3vw, 0.8rem);
-    text-transform: lowercase;
+/* Исправленная версия для .stat-value */
+.stat-value {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--primary); /* Добавляем fallback цвет */
 }
 
-.lecture-type::first-letter {
-    text-transform: uppercase;
+/* Градиентные тексты только когда явно указаны классы */
+.stat-value.good {
+    background: linear-gradient(135deg, var(--success), #059669);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-value.warning {
+    background: linear-gradient(135deg, var(--warning), #d97706);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-value.danger {
+    background: linear-gradient(135deg, var(--danger), #dc2626);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Для обычного stat-value без класса */
+.stat-value:not(.good):not(.warning):not(.danger) {
+    -webkit-text-fill-color: initial;
+    background: none;
+    color: var(--primary);
+}
+
+/* Стили для студентов в модальных окнах (как у старосты) */
+.student-view-item,
+.student-edit-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(1rem, 2vw, 1.25rem);
+    border-bottom: 1px solid var(--gray-200);
+    flex-wrap: wrap;
+    gap: 1rem;
+    transition: background-color 0.2s ease;
+    cursor: default;
+}
+
+.student-edit-item.editable {
+    cursor: pointer;
+}
+
+.student-view-item:hover,
+.student-edit-item.editable:hover {
+    background-color: var(--gray-100);
+}
+
+.student-view-item:last-child,
+.student-edit-item:last-child {
+    border-bottom: none;
+}
+
+.student-view-item.present,
+.student-edit-item.present {
+    background: var(--success-light);
+    border-color: var(--success-border);
+}
+
+.student-view-item.absent,
+.student-edit-item.absent {
+    background: var(--danger-light);
+    border-color: var(--danger-border);
+}
+
+.student-view-item .student-info,
+.student-edit-item .student-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: min(200px, 100%);
+}
+
+.student-view-item .student-name,
+.student-edit-item .student-name {
+    font-weight: 600;
+    word-break: break-word;
+    color: var(--gray-800);
+    font-size: clamp(0.95rem, 2vw, 1.05rem);
+}
+
+.student-view-item .student-group,
+.student-edit-item .student-group {
+    color: var(--gray-600);
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    margin-top: 0.25rem;
+}
+
+.student-view-item .attendance-badge,
+.student-edit-item .attendance-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 1.5rem;
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    font-weight: 600;
+    white-space: nowrap;
+    min-width: 80px;
+    text-align: center;
+}
+
+.student-view-item.present .attendance-badge,
+.student-edit-item.present .attendance-badge {
+    background: var(--success-light);
+    color: var(--success);
+    border: 1px solid var(--success-border);
+}
+
+.student-view-item.absent .attendance-badge,
+.student-edit-item.absent .attendance-badge {
+    background: var(--danger-light);
+    color: var(--danger);
+    border: 1px solid var(--danger-border);
+}
+
+/* Контейнер для списка студентов */
+.students-edit-list {
+    max-height: 400px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 0.5rem;
+    border: 1px solid var(--gray-200);
+    background: var(--white);
+}
+
+/* Сетка информации о паре в модальном окне */
+.lecture-info-grid {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--gray-100);
+    border-radius: 0.75rem;
+    border: 1px solid var(--gray-200);
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.info-item label {
+    font-weight: 600;
+    color: var(--gray-700);
+    min-width: 140px;
+}
+
+.info-item.success span {
+    color: var(--success);
+    font-weight: 600;
+}
+
+.info-item.warning span {
+    color: var(--warning);
+    font-weight: 600;
+}
+
+.info-item.danger span {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+    .student-view-item,
+    .student-edit-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .student-view-item .attendance-badge,
+    .student-edit-item .attendance-badge {
+        align-self: flex-start;
+    }
+
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+
+    .info-item label {
+        min-width: auto;
+    }
 }

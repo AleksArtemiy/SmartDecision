@@ -4,6 +4,26 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'teacher') {
     header('Location: ../index.php');
     exit();
 }
+
+// Данные преподавателя (в реальном приложении брались бы из БД)
+$teacher_name = "Иванова А.С.";
+$teacher_stats = [
+    'total_groups' => 12,
+    'total_lectures' => 24,
+    'avg_attendance' => 78
+];
+
+// Данные для расписания (в реальном приложении брались бы из БД)
+$schedule_data = [
+    'current_week' => '18 - 24 ноября 2024',
+    'time_slots' => [
+        '09:00-10:30',
+        '10:45-12:15', 
+        '13:00-14:30',
+        '14:45-16:15',
+        '16:30-18:00'
+    ]
+];
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -19,7 +39,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'teacher') {
 <header class="header">
     <a href="../headmen/index.html" class="logo">Журнал 2.0</a>
     <div class="user-menu">
-        <span>Преподаватель: Иванова А.С.</span>
+        <span>Преподаватель: <?php echo htmlspecialchars($teacher_name); ?></span>
         <button class="btn btn-secondary" onclick="logout()">Выйти</button>
     </div>
 </header>
@@ -31,7 +51,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'teacher') {
                 <h2>Мое расписание</h2>
                 <div class="week-navigation">
                     <button class="btn btn-secondary" id="prev-week">← Пред.</button>
-                    <div class="current-week" id="current-week">18 - 24 ноября 2024</div>
+                    <div class="current-week" id="current-week"><?php echo htmlspecialchars($schedule_data['current_week']); ?></div>
                     <button class="btn btn-secondary" id="next-week">След. →</button>
                 </div>
             </div>
@@ -71,6 +91,17 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'teacher') {
                     </tr>
                     </thead>
                     <tbody id="schedule-body">
+                    <?php foreach ($schedule_data['time_slots'] as $time_slot): ?>
+                    <tr>
+                        <td class="time-column"><?php echo htmlspecialchars($time_slot); ?></td>
+                        <td data-time="<?php echo htmlspecialchars($time_slot); ?>" data-day="monday"></td>
+                        <td data-time="<?php echo htmlspecialchars($time_slot); ?>" data-day="tuesday"></td>
+                        <td data-time="<?php echo htmlspecialchars($time_slot); ?>" data-day="wednesday"></td>
+                        <td data-time="<?php echo htmlspecialchars($time_slot); ?>" data-day="thursday"></td>
+                        <td data-time="<?php echo htmlspecialchars($time_slot); ?>" data-day="friday"></td>
+                        <td data-time="<?php echo htmlspecialchars($time_slot); ?>" data-day="saturday"></td>
+                    </tr>
+                    <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
@@ -80,16 +111,19 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'teacher') {
             <h2 style="margin-bottom: 1.5rem;">Моя статистика</h2>
             <div class="stats-overview">
                 <div class="stat-card good">
-                    <div class="stat-value good" id="total-groups">12</div>
+                    <div class="stat-value good" id="total-groups"><?php echo $teacher_stats['total_groups']; ?></div>
                     <div class="stat-label">Групп всего</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="total-lectures">24</div>
+                    <div class="stat-value" id="total-lectures"><?php echo $teacher_stats['total_lectures']; ?></div>
                     <div class="stat-label">Пар в неделю</div>
                 </div>
                 <div class="stat-card warning">
-                    <div class="stat-value warning" id="avg-attendance">78%</div>
+                    <div class="stat-value warning" id="avg-attendance"><?php echo $teacher_stats['avg_attendance']; ?>%</div>
                     <div class="stat-label">Средняя посещаемость</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill warning" style="width: <?php echo $teacher_stats['avg_attendance']; ?>%"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -97,14 +131,14 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'teacher') {
 </div>
 
 <!-- Модальное окно просмотра -->
-<div class="view-modal" id="view-modal">
-    <div class="view-modal-content">
+<div class="modal-overlay" id="view-modal">
+    <div class="modal-content">
         <div class="modal-header">
             <div class="modal-title" id="view-modal-title">Посещаемость</div>
             <button class="close-modal" id="close-view-modal">×</button>
         </div>
 
-        <div id="view-modal-body">
+        <div class="modal-body" id="view-modal-body">
             <!-- Содержимое будет заполнено через JavaScript -->
         </div>
 
@@ -117,22 +151,24 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'teacher') {
 </div>
 
 <!-- Модальное окно редактирования -->
-<div class="edit-modal" id="edit-modal">
-    <div class="edit-modal-content">
+<div class="modal-overlay" id="edit-modal">
+    <div class="modal-content">
         <div class="modal-header">
             <div class="modal-title" id="edit-modal-title">Редактирование посещаемости</div>
             <button class="close-modal" id="close-edit-modal">×</button>
         </div>
 
-        <div class="edit-notice">
-            📝 Режим редактирования. Кликните на студента для изменения статуса
+        <div class="modal-body">
+            <div class="edit-notice">
+                📝 Режим редактирования. Кликните на студента для изменения статуса
+            </div>
+
+            <div id="edit-modal-body">
+                <!-- Содержимое будет заполнено через JavaScript -->
+            </div>
         </div>
 
-        <div id="edit-modal-body">
-            <!-- Содержимое будет заполнено через JavaScript -->
-        </div>
-
-        <div class="quick-actions">
+        <div class="modal-actions">
             <button class="btn btn-secondary" id="cancel-edit">Отмена</button>
             <button class="btn btn-success" id="save-edit-changes">Подтвердить изменения</button>
         </div>
